@@ -1,10 +1,10 @@
-# Valentine Project
+# ValentineWeek
 
 Valentine Project is a responsive web application designed to celebrate love throughout Valentine's week. It features themed pages for each day, interactive countdowns, smooth animations, and a hidden Valentine's special page that unlocks when you click the heart icon three times. The content is easily customizable via a JSON configuration file.
 
 ## Live Website
 
-Check out the live site here: [Live Valentine Project](https://nouzen-shinei.github.io/Valentine-Week/)
+Check out the live site here: [Live Valentine Project](https://am3108.github.io/ValentineWeek/)
 
 ## Features
 
@@ -55,8 +55,8 @@ Check out the live site here: [Live Valentine Project](https://nouzen-shinei.git
 1. **Clone the Repository**
 
    ```bash
-   git clone https://github.com/yourusername/Valentine-Project.git
-   cd Valentine-Project
+   git clone https://github.com/AM3108/ValentineWeek.git
+   cd ValentineWeek
    ```
 
 2. **Open in Your Browser**  

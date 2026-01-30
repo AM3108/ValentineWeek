@@ -1,6 +1,26 @@
 {
-    "fpName": "Shivam",
-    "spName": "Ankita Ji",
-    "instagramUsername": "shivam_kumar_8969",
-    "instagramProfileName": "Shivam Kumar"
+    "fpName": "Atul Mishra",
+    "spName": "Shraddha Ji",
+    "instagramUsername": "a.m_3108",
+    "instagramProfileName": "Atul Mishra",
+    "pagePasswords": {
+        "rose.html": "1234",
+        "propose.html": "1234",
+        "chocolate.html": "1234",
+        "teddy.html": "1234",
+        "promise.html": "1234",
+        "hug.html": "1234",
+        "kiss.html": "1234",
+        "valentine.html": "1234"
+    },
+    "pageHints": {
+        "rose.html": "Our special number",
+        "propose.html": "Our special number",
+        "chocolate.html": "Our special number",
+        "teddy.html": "Our special number",
+        "promise.html": "Our special number",
+        "hug.html": "Our special number",
+        "kiss.html": "Our special number",
+        "valentine.html": "Our special number"
+    }
 }

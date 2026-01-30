@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>Happy Valentine's Day My Love 💗💗💗</title>
     <link rel="stylesheet" href="quotes.css">
     <link rel="stylesheet"
@@ -116,61 +116,139 @@
         </div>
     </div>
 
+    <!-- Password Modal -->
+    <div id="password-modal" class="password-modal hidden">
+        <div class="password-modal-content">
+            <h3 class="password-modal-title">Enter Secret Code</h3>
+            <p class="password-modal-subtitle">Only my special one can open this 🥰</p>
+            <p id="password-hint" class="password-hint"></p>
+            <input type="password" id="password-input" class="password-input" placeholder="Enter password" />
+            <div class="password-modal-actions">
+                <button id="password-cancel" class="password-btn password-btn-cancel">Cancel</button>
+                <button id="password-submit" class="password-btn password-btn-submit">Unlock</button>
+            </div>
+            <p id="password-error" class="password-error"></p>
+        </div>
+    </div>
+
     <script src="https://cdn.lordicon.com/lordicon.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            // Fetch config.json and update Instagram profile link
+            // Fetch config.json and update Instagram profile link + passwords
             fetch('config.json')
                 .then(response => response.json())
                 .then(data => {
+                    // Instagram footer
                     const instagramProfileLink = document.getElementById('instagramProfileLink');
                     const instagramProfileNameElement = document.getElementById('instagramProfileName');
                     instagramProfileLink.href = `https://instagram.com/${data.instagramUsername}`;
                     instagramProfileNameElement.textContent = data.instagramProfileName;
+
+                    // Countdown and password protection logic
+                    const dayLinks = document.querySelectorAll('.day-link');
+
+                    // Password modal elements
+                    const passwordModal = document.getElementById('password-modal');
+                    const passwordInput = document.getElementById('password-input');
+                    const passwordHint = document.getElementById('password-hint');
+                    const passwordError = document.getElementById('password-error');
+                    const passwordCancel = document.getElementById('password-cancel');
+                    const passwordSubmit = document.getElementById('password-submit');
+
+                    function openPasswordModal(hint, onSubmit) {
+                        passwordInput.value = '';
+                        passwordError.textContent = '';
+                        passwordHint.textContent = hint ? `Hint: ${hint}` : '';
+                        passwordHint.style.display = hint ? 'block' : 'none';
+                        passwordModal.classList.remove('hidden');
+                        passwordInput.focus();
+
+                        function handleSubmit() {
+                            const value = passwordInput.value.trim();
+                            onSubmit(value);
+                        }
+
+                        // Attach temporary handlers
+                        passwordSubmit.onclick = function () {
+                            handleSubmit();
+                        };
+
+                        passwordInput.onkeydown = function (e) {
+                            if (e.key === 'Enter') {
+                                e.preventDefault();
+                                handleSubmit();
+                            }
+                        };
+
+                        passwordCancel.onclick = function () {
+                            passwordModal.classList.add('hidden');
+                        };
+                    }
+
+                    function closePasswordModal() {
+                        passwordModal.classList.add('hidden');
+                    }
+
+                    dayLinks.forEach(link => {
+                        const dayDate = new Date(link.getAttribute('data-date') + 'T00:00:00+05:30'); // Adjust for IST
+                        const countdownElement = link.querySelector('.countdown');
+                        const targetHref = link.getAttribute('href');
+
+                        function updateCountdown() {
+                            const timeDiff = dayDate - new Date(); // Use current time dynamically
+                            if (timeDiff <= 0) {
+                                countdownElement.textContent = 'This day is now available!';
+                                clearInterval(interval);
+                                return;
+                            }
+
+                            const days = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
+                            const hours = Math.floor((timeDiff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                            const minutes = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
+                            const seconds = Math.floor((timeDiff % (1000 * 60)) / 1000);
+
+                            countdownElement.textContent = `Time left: ${days}d ${hours}h ${minutes}m ${seconds}s`;
+                        }
+
+                        const interval = setInterval(updateCountdown, 1000);
+                        updateCountdown(); // Initial call
+
+                        link.addEventListener('click', function (event) {
+                            const now = new Date();
+
+                            // If day is not yet available, block access
+                            if (now < dayDate) {
+                                event.preventDefault();
+                                countdownElement.textContent = 'This day is not yet available. Please wait...';
+                                return;
+                            }
+
+                            // Day is available: require password with themed modal
+                            event.preventDefault();
+
+                            const pagePasswords = data.pagePasswords || {};
+                            const pageHints = data.pageHints || {};
+                            const expectedPassword = pagePasswords[targetHref] || '1234'; // fallback
+                            const hint = pageHints[targetHref] || '';
+
+                            openPasswordModal(hint, function (userPassword) {
+                                if (!userPassword) {
+                                    passwordError.textContent = 'Please enter the password.';
+                                    return;
+                                }
+
+                                if (userPassword === expectedPassword) {
+                                    closePasswordModal();
+                                    window.parent.postMessage('startMusic', '*');
+                                    window.location.href = targetHref;
+                                } else {
+                                    passwordError.textContent = 'Incorrect password. Please try again.';
+                                }
+                            });
+                        });
+                    });
                 })
                 .catch(error => console.error('Error fetching config.json:', error));
-
-            // Countdown logic
-            const dayLinks = document.querySelectorAll('.day-link');
-            const currentDate = new Date();
-
-            dayLinks.forEach(link => {
-                const dayDate = new Date(link.getAttribute('data-date') + 'T00:00:00+05:30'); // Adjust for IST
-                const countdownElement = link.querySelector('.countdown');
-
-                function updateCountdown() {
-                    const timeDiff = dayDate - new Date(); // Use current time dynamically
-                    if (timeDiff <= 0) {
-                        countdownElement.textContent = 'This day is now available!';
-                        clearInterval(interval);
-                        return;
-                    }
-
-                    const days = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
-                    const hours = Math.floor((timeDiff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                    const minutes = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
-                    const seconds = Math.floor((timeDiff % (1000 * 60)) / 1000);
-
-                    countdownElement.textContent = `Time left: ${days}d ${hours}h ${minutes}m ${seconds}s`;
-                }
-
-                const interval = setInterval(updateCountdown, 1000);
-                updateCountdown(); // Initial call
-
-                link.addEventListener('click', function (event) {
-                    if (new Date() < dayDate) {
-                        event.preventDefault();
-                        countdownElement.textContent = 'This day is not yet available. Please wait...';
-                    }
-                });
-            });
-
-            // Music playback logic
-            document.querySelectorAll('.day-link').forEach(link => {
-                link.addEventListener('click', function (event) {
-                    window.parent.postMessage('startMusic', '*');
-                });
-            });
         });
     </script>
 </body>

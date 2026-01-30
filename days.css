@@ -68,9 +68,10 @@ body {
 
 .left {
     text-align: center;
-    background: url(./assets/d-ng-h-u-CCjgYjUudxE-unsplash.jpg);
+    background: url(./assets/night-sky-background.png);
     background-size: cover;
     background-position: center;
+    background-repeat: no-repeat;
     /* Center the background image */
     height: 100%;
     padding: 1rem 1rem;
@@ -87,6 +88,7 @@ body {
     font-family: 'Protest Revolution', sans-serif;
     text-transform: uppercase;
     padding: 0.2rem 0;
+    color: var(--white);
 }
 
 h3 {

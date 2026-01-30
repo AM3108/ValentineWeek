@@ -9,12 +9,16 @@
 }
 
 body {
-    /* height: 100vh; */
     width: 100%;
-    background: url(./assets/couple-6935366.jpg);
+    min-height: 100vh;
+    min-height: 100dvh;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+    background: url(./assets/night-sky-background.png);
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center;
+    padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
 }
 
 :root {
@@ -25,38 +29,176 @@ body {
 }
 
 .main {
-    height: 100%;
+    min-height: 100vh;
+    min-height: 100dvh;
     width: 100%;
     display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.main {
     flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
     padding: 2rem 1rem;
+    padding-top: max(2rem, env(safe-area-inset-top));
+    padding-bottom: max(2rem, env(safe-area-inset-bottom));
 }
 
 .main h2 {
-    color: #515235;
+    color: var(--white);
     letter-spacing: 10px;
     font-size: 50px;
     transform: rotate(-2deg);
-    border-bottom: 2px dotted  #515235;
+    border-bottom: 2px dotted var(--white);
     border-radius: 1rem;
     padding: 0.5rem;
     margin-top: 2.5rem;
+    flex-shrink: 0;
 }
 
 .container {
     display: grid;
     width: 90%;
-    height: 75vh;
-    place-content: center;
-    /* padding: 3rem 4rem; */
-    flex-wrap: wrap;
-    gap: 2rem;
+    max-width: 1200px;
+    min-height: 0;
+    flex: 1 1 auto;
+    place-content: start center;
+    gap: 1.5rem;
     grid-template-columns: repeat(4, 1fr);
+    padding: 1rem 0;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+/* Desktop: ensure proper spacing */
+@media only screen and (min-width: 769px) {
+    .container {
+        gap: 1.75rem;
+    }
+    
+    .day {
+        padding: 1rem;
+    }
+}
+
+.password-modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+}
+
+.password-modal.hidden {
+    display: none;
+}
+
+.password-modal-content {
+    background: rgba(255, 255, 255, 0.12);
+    backdrop-filter: blur(25px);
+    -webkit-backdrop-filter: blur(25px);
+    border-radius: 1.5rem;
+    padding: 1.5rem 2rem;
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+    text-align: center;
+    max-width: 320px;
+    width: calc(100% - 2rem);
+    max-height: calc(100vh - 2rem);
+    max-height: calc(100dvh - 2rem);
+    overflow: auto;
+}
+
+.password-modal-title {
+    color: #fff;
+    font-size: 1.8rem;
+    margin-bottom: 0.3rem;
+}
+
+.password-modal-subtitle {
+    color: #f9f9f9;
+    font-size: 0.9rem;
+    letter-spacing: 1px;
+    margin-bottom: 0.5rem;
+}
+
+.password-hint {
+    color: var(--primary);
+    font-size: 0.85rem;
+    letter-spacing: 1px;
+    margin-bottom: 1rem;
+    font-style: italic;
+}
+
+.password-input {
+    width: 100%;
+    padding: 0.75rem 0.8rem;
+    min-height: 44px;
+    border-radius: 999px;
+    border: 1px solid rgba(255, 255, 255, 0.7);
+    outline: none;
+    background: rgba(0, 0, 0, 0.3);
+    color: #fff;
+    font-size: 16px; /* prevents iOS zoom on focus */
+    text-align: center;
+    margin-bottom: 0.8rem;
+    -webkit-appearance: none;
+    appearance: none;
+}
+
+.password-input::placeholder {
+    color: #ddd;
+}
+
+.password-modal-actions {
+    display: flex;
+    justify-content: space-between;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.password-btn {
+    flex: 1;
+    padding: 0.65rem 0.8rem;
+    min-height: 44px;
+    border-radius: 999px;
+    border: none;
+    cursor: pointer;
+    font-size: 0.9rem;
+    letter-spacing: 1px;
+    transition: all 0.2s ease;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+}
+
+.password-btn-submit {
+    background: linear-gradient(135deg, #cb5eee, #4be1ec);
+    color: #fff;
+}
+
+.password-btn-submit:hover {
+    filter: brightness(1.05);
+    transform: translateY(-1px);
+}
+
+.password-btn-cancel {
+    background: rgba(0, 0, 0, 0.4);
+    color: #fff;
+}
+
+.password-btn-cancel:hover {
+    background: rgba(0, 0, 0, 0.6);
+}
+
+.password-error {
+    color: #ffb3c6;
+    font-size: 0.8rem;
+    min-height: 1.2rem;
+}
+
+.day-link {
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
 }
 
 .day {
@@ -66,11 +208,12 @@ body {
     gap: 1rem;
     border-radius: 1rem;
     cursor: pointer;
-    justify-content: space-around;
+    justify-content: flex-start;
     align-items: center;
     transition: all 0.3s ease;
-    padding: 0.5rem;
+    padding: 0.75rem;
     backdrop-filter: blur(30px);
+    -webkit-backdrop-filter: blur(30px);
 }
 
 .day:hover>.info .day-name {
@@ -82,13 +225,21 @@ body {
 }
 
 .icon {
-    width: 30%;
+    flex-shrink: 0;
+    width: auto;
+    min-width: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .info {
     color: white;
     letter-spacing: 3px;
-    text-align: justify;
+    text-align: left;
+    min-width: 0;
+    flex: 1;
+    overflow: hidden;
 }
 
 .day-name {
@@ -99,38 +250,163 @@ body {
     font-size: 1.3rem;
 }
 
+.countdown {
+    font-size: 0.85rem;
+    word-break: break-word;
+    line-height: 1.3;
+}
+
 lord-icon {
-    width: 120px;
-    height: 120px;
+    width: 100px;
+    height: 100px;
+    flex-shrink: 0;
+}
+
+/* Desktop: larger icons */
+@media only screen and (min-width: 769px) {
+    lord-icon {
+        width: 110px;
+        height: 110px;
+    }
+}
+
+.copyright-container {
+    flex-shrink: 0;
+    padding: 0.5rem;
+    text-align: center;
 }
 
 .copyright {
     font-size: 1.5rem;
     color: var(--white);
-    font-family: 'Protest';
+    font-family: 'Protest', sans-serif;
     transform: rotate(-1deg);
     border-bottom: 2px dotted var(--white);
     border-radius: 1rem;
     padding: 0.4rem;
+    display: inline-block;
 }
 
-@media only screen and (max-width: 400px) {
-    .container {
-        display: flex;
-        flex-direction: column;
-        width: 100%;
-        height: max-content;
-        padding: 1rem 0;
+.copyright a {
+    -webkit-tap-highlight-color: transparent;
+}
+
+/* Tablet: 2 columns */
+@media only screen and (max-width: 768px) {
+    .main h2 {
+        font-size: 2rem;
+        letter-spacing: 4px;
+        margin-top: 1rem;
     }
 
-    .main h2 {
-        margin-top: 0;
-        margin-bottom: 1.3rem;
-        font-size: 22px;
+    .container {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1.25rem;
+        width: 95%;
+    }
+
+    .day-name {
+        font-size: 1.2rem;
+    }
+
+    .date {
+        font-size: 1rem;
     }
 
     lord-icon {
-        width: 100px;
-        height: 100px;
+        width: 80px;
+        height: 80px;
+    }
+
+    .countdown {
+        font-size: 0.75rem;
+    }
+}
+
+/* Mobile: 1 column, touch-friendly */
+@media only screen and (max-width: 600px) {
+    .main {
+        padding: 1rem 0.75rem;
+        padding-top: max(1rem, env(safe-area-inset-top));
+        padding-bottom: max(1rem, env(safe-area-inset-bottom));
+    }
+
+    .main h2 {
+        font-size: 1.5rem;
+        letter-spacing: 2px;
+        margin-top: 0.5rem;
+        margin-bottom: 1rem;
+    }
+
+    .container {
+        grid-template-columns: 1fr;
+        width: 95%;
+        max-width: 400px;
+        gap: 0.75rem;
+        padding: 0.25rem;
+    }
+
+    .day {
+        padding: 0.6rem;
+        min-height: 0;
+        gap: 0.75rem;
+    }
+
+    .day-name {
+        font-size: 1.25rem;
+    }
+
+    .date {
+        font-size: 1rem;
+    }
+
+    .icon {
+        width: auto;
+        flex-shrink: 0;
+    }
+
+    lord-icon {
+        width: 70px;
+        height: 70px;
+    }
+
+    .countdown {
+        font-size: 0.8rem;
+    }
+
+    .copyright {
+        font-size: 1rem;
+        padding: 0.3rem 0.5rem;
+    }
+
+    /* Password modal on small screens */
+    .password-modal-content {
+        padding: 1.25rem 1.5rem;
+        margin: 1rem;
+    }
+
+    .password-modal-title {
+        font-size: 1.5rem;
+    }
+
+    .password-modal-subtitle {
+        font-size: 0.85rem;
+    }
+}
+
+/* Very small phones */
+@media only screen and (max-width: 400px) {
+    .main h2 {
+        font-size: 1.25rem;
+        letter-spacing: 1px;
+    }
+
+    lord-icon {
+        width: 60px;
+        height: 60px;
+    }
+
+    .countdown {
+        font-size: 0.7rem;
     }
 }

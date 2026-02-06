@@ -4,6 +4,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
     <title>Happy Propose Day!</title>
     <link rel="stylesheet" href="days.css">
     <link rel="stylesheet"
@@ -34,7 +37,7 @@
             </div>
             <div class="right propose-right">
                 <div class="back-container">
-                    <a href="#" onclick="window.history.back()">
+                    <a href="#" onclick="if (window.parent !== window) window.parent.postMessage('restoreDefaultMusic', '*'); window.history.back(); return false;">
                         <div class="back">
                             <span class="material-symbols-outlined">arrow_back</span>
                             <span class="back-text">Go back</span>
@@ -42,7 +45,13 @@
                     </a>
                 </div>
                 <h3 class="quote-heading">Special Quotes to propose my special one! ❤️</h3>
-                <div class="quotes"></div>
+                <div class="propose-game-wrap">
+                    <p class="propose-game-title" id="propose-quiz-title">Question 1 of 3</p>
+                    <p class="propose-quiz-question" id="propose-quiz-question"></p>
+                    <div class="propose-quiz-options" id="propose-quiz-options"></div>
+                    <p class="propose-quiz-status" id="propose-quiz-status"></p>
+                </div>
+                <div class="quotes quotes-fullscreen propose-hidden-until-game" id="propose-quotes-area"></div>
             </div>
         </div>
         <div class="copyright-container">
@@ -50,8 +59,98 @@
         </div>
     </div>
 
+    <script src="./express-feelings.js"></script>
     <script src="./quotesProposeDay.js"></script>
     <script src="https://cdn.lordicon.com/lordicon.js"></script>
+    <script>
+        (function () {
+            var quizData = [
+                { q: 'Who is more smarter?', options: ['Atul', 'Madam Ji'], correct: 0 },
+                { q: 'Who gets angry faster?', options: ['Atul', 'Madam Ji'], correct: 1 },
+                { q: 'Who is the Boss here?', options: ['Atul', 'Madam Ji'], correct: 0 }
+            ];
+            var currentQ = 0;
+            var titleEl = document.getElementById('propose-quiz-title');
+            var questionEl = document.getElementById('propose-quiz-question');
+            var optionsEl = document.getElementById('propose-quiz-options');
+            var statusEl = document.getElementById('propose-quiz-status');
+            if (!titleEl || !questionEl || !optionsEl || !statusEl) return;
+
+            function renderQuestion() {
+                var d = quizData[currentQ];
+                titleEl.textContent = 'Question ' + (currentQ + 1) + ' of 3';
+                questionEl.textContent = d.q;
+                optionsEl.innerHTML = '';
+                d.options.forEach(function (text, idx) {
+                    var btn = document.createElement('button');
+                    btn.type = 'button';
+                    btn.className = 'propose-option';
+                    btn.textContent = (idx === 0 ? 'A - ' : 'B - ') + text;
+                    btn.dataset.index = idx;
+                    btn.addEventListener('click', handleOption);
+                    optionsEl.appendChild(btn);
+                });
+                statusEl.textContent = 'Select an option';
+            }
+
+            function handleOption(e) {
+                var btn = e.currentTarget;
+                if (btn.disabled) return;
+                var d = quizData[currentQ];
+                var chosen = parseInt(btn.dataset.index, 10);
+                if (chosen === d.correct) {
+                    btn.classList.add('option-correct');
+                    var allBtns = optionsEl.querySelectorAll('.propose-option');
+                    for (var i = 0; i < allBtns.length; i++) allBtns[i].disabled = true;
+                    statusEl.textContent = 'Correct! ✓';
+                    setTimeout(function () {
+                        currentQ++;
+                        if (currentQ < quizData.length) {
+                            renderQuestion();
+                        } else {
+                            statusEl.textContent = 'All correct! 💐';
+                            setTimeout(function () {
+                                statusEl.textContent = 'Congratulations Madam Ji, you are so smart! 🎉';
+                                setTimeout(function () {
+                                    statusEl.textContent = '3...';
+                                    setTimeout(function () {
+                                        statusEl.textContent = '2...';
+                                        setTimeout(function () {
+                                            statusEl.textContent = '1...';
+                                            setTimeout(function () {
+                                                var gameWrap = document.querySelector('.propose-game-wrap');
+                                                var quotesArea = document.getElementById('propose-quotes-area');
+                                                if (gameWrap) gameWrap.style.display = 'none';
+                                                if (quotesArea) quotesArea.classList.remove('propose-hidden-until-game');
+                                                if (typeof window.startProposeQuoteTypewriter === 'function') window.startProposeQuoteTypewriter();
+                                            }, 1000);
+                                        }, 1000);
+                                    }, 1000);
+                                }, 2000);
+                            }, 1500);
+                        }
+                    }, 1200);
+                } else {
+                    btn.classList.add('option-wrong');
+                    statusEl.textContent = 'Wrong! Try again.';
+                    setTimeout(function () {
+                        btn.classList.remove('option-wrong');
+                        statusEl.textContent = 'Select an option';
+                    }, 1000);
+                }
+            }
+
+            renderQuestion();
+        })();
+    </script>
+    <script>
+        if (window.parent !== window) {
+            window.parent.postMessage({ type: 'playDaySong', src: './assets/Sadka(MP3_160K).mp3' }, '*');
+        }
+        window.addEventListener('beforeunload', function () {
+            if (window.parent !== window) window.parent.postMessage('restoreDefaultMusic', '*');
+        });
+    </script>
 </body>
 
 </html>

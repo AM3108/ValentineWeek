@@ -4,6 +4,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
     <title>Happy Valentine's Day My Love 💗💗💗</title>
     <link rel="stylesheet" href="quotes.css">
     <link rel="stylesheet"
@@ -14,7 +17,7 @@
     <div class="main">
         <h2>* Choose the day *</h2>
         <div class="container">
-            <a href="rose.html" class="day-link" data-date="2025-02-07">
+            <a href="rose.html" class="day-link" data-date="2026-02-07">
                 <div class="rose-day day">
                     <div class="icon">
                         <lord-icon src="https://cdn.lordicon.com/jmeofbeb.json" trigger="hover"></lord-icon>
@@ -26,7 +29,7 @@
                     </div>
                 </div>
             </a>
-            <a href="propose.html" class="day-link" data-date="2025-02-08">
+            <a href="propose.html" class="day-link" data-date="2026-02-08">
                 <div class="propose-day day">
                     <div class="icon">
                         <lord-icon src="https://cdn.lordicon.com/etgnxeer.json" trigger="hover"></lord-icon>
@@ -38,7 +41,7 @@
                     </div>
                 </div>
             </a>
-            <a href="chocolate.html" class="day-link" data-date="2025-02-09">
+            <a href="chocolate.html" class="day-link" data-date="2026-02-09">
                 <div class="chocolate-day day">
                     <div class="icon">
                         <lord-icon src="https://cdn.lordicon.com/mlxonlmo.json" trigger="hover"></lord-icon>
@@ -50,7 +53,7 @@
                     </div>
                 </div>
             </a>
-            <a href="teddy.html" class="day-link" data-date="2025-02-10">
+            <a href="teddy.html" class="day-link" data-date="2026-02-10">
                 <div class="teddy-day day">
                     <div class="icon">
                         <lord-icon src="https://cdn.lordicon.com/mlxonlmo.json" trigger="hover"></lord-icon>
@@ -62,7 +65,7 @@
                     </div>
                 </div>
             </a>
-            <a href="promise.html" class="day-link" data-date="2025-02-11">
+            <a href="promise.html" class="day-link" data-date="2026-02-11">
                 <div class="promise-day day">
                     <div class="icon">
                         <lord-icon src="https://cdn.lordicon.com/ibufipbp.json" trigger="hover"></lord-icon>
@@ -74,7 +77,7 @@
                     </div>
                 </div>
             </a>
-            <a href="hug.html" class="day-link" data-date="2025-02-12">
+            <a href="hug.html" class="day-link" data-date="2026-02-12">
                 <div class="hug-day day">
                     <div class="icon">
                         <lord-icon src="https://cdn.lordicon.com/etgnxeer.json" trigger="hover"></lord-icon>
@@ -86,7 +89,7 @@
                     </div>
                 </div>
             </a>
-            <a href="kiss.html" class="day-link" data-date="2025-02-13">
+            <a href="kiss.html" class="day-link" data-date="2026-02-13">
                 <div class="kis-day day">
                     <div class="icon">
                         <lord-icon src="https://cdn.lordicon.com/etgnxeer.json" trigger="hover"></lord-icon>
@@ -98,7 +101,7 @@
                     </div>
                 </div>
             </a>
-            <a href="valentine.html" class="day-link" data-date="2025-02-14">
+            <a href="valentine.html" class="day-link" data-date="2026-02-14">
                 <div class="valentine-day day">
                     <div class="icon">
                         <lord-icon src="https://cdn.lordicon.com/etgnxeer.json" trigger="hover"></lord-icon>
@@ -237,7 +240,7 @@
                                     return;
                                 }
 
-                                if (userPassword === expectedPassword) {
+                                if (userPassword.toLowerCase() === expectedPassword.toLowerCase()) {
                                     closePasswordModal();
                                     window.parent.postMessage('startMusic', '*');
                                     window.location.href = targetHref;

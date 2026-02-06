@@ -4,6 +4,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
     <title>Happy Valentine's Day!</title>
     <link rel="stylesheet" href="days.css">
     <link rel="stylesheet" href="./mini heart element/style.css">
@@ -34,7 +37,7 @@
             </div>
             <div class="right valentine-right">
                 <div class="back-container">
-                    <a href="#" onclick="window.history.back()">
+                    <a href="#" onclick="if (window.parent !== window) window.parent.postMessage('restoreDefaultMusic', '*'); window.history.back(); return false;">
                         <div class="back">
                             <span class="material-symbols-outlined">arrow_back</span>
                             <span class="back-text">Go back</span>
@@ -42,7 +45,7 @@
                     </a>
                 </div>
                 <h3 class="quote-heading">Special Quotes for my special one on the Valentine's Day! ❤️</h3>
-                <div class="quotes"></div>
+                <div class="quotes quotes-fullscreen"></div>
             </div>
         </div>
         <div class="heart-wrap">
@@ -70,10 +73,19 @@
             <h3 class="copyright">Created with ❤️ by <a id="instagramProfileLink" href="#" target="_blank"><span id="instagramProfileName"></span></a></h3>
         </div>
     </div>
+    <script src="./express-feelings.js"></script>
     <script src="./quotesValentineDay.js"></script>
     <script src="./mini heart element/script.js"></script>
     <script src='https://cdnjs.cloudflare.com/ajax/libs/gsap/3.2.6/gsap.min.js'></script>
     <script src="https://cdn.lordicon.com/lordicon.js"></script>
+    <script>
+        if (window.parent !== window) {
+            window.parent.postMessage({ type: 'playDaySong', src: './assets/Hai Na Bolo(MP3_160K).mp3' }, '*');
+        }
+        window.addEventListener('beforeunload', function () {
+            if (window.parent !== window) window.parent.postMessage('restoreDefaultMusic', '*');
+        });
+    </script>
     <script>
         // JavaScript to handle the tank filling animation and redirection
         document.addEventListener('DOMContentLoaded', function () {

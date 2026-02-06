@@ -4,6 +4,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
     <!-- The title will be updated dynamically using config.json -->
     <title>Happy Valentine's Day My Love 💗💗💗</title>
     <link rel="stylesheet" href="quotes.css">
@@ -172,6 +175,45 @@
                 // Remove the rotate class from the music icon
                 if (musicCloseDom) {
                     musicCloseDom.classList.remove('rotate');
+                }
+            }
+            if (event.data === 'playRoseDaySong') {
+                if (audioDom) {
+                    audioDom.pause();
+                    audioDom.currentTime = 0;
+                    var roseDaySong = encodeURI('./assets/Chot Dil Pe Lagi  Lyrical _ Ishq Vishk Rebound _Rohit_ Pashmina_ Jibraan_ Naila _ Asees_Varun_Rochak(MP3_160K).mp3');
+                    audioDom.src = roseDaySong;
+                    audioDom.load();
+                    audioDom.play().catch(function () { });
+                }
+                if (musicCloseDom) {
+                    musicCloseDom.classList.add('rotate');
+                }
+            }
+            // When any day page opens: stop current song and play that day's song (object: { type: 'playDaySong', src: 'path' }).
+            if (event.data && event.data.type === 'playDaySong' && event.data.src) {
+                if (audioDom) {
+                    audioDom.pause();
+                    audioDom.currentTime = 0;
+                    audioDom.src = encodeURI(event.data.src);
+                    audioDom.load();
+                    audioDom.play().catch(function () { });
+                }
+                if (musicCloseDom) {
+                    musicCloseDom.classList.add('rotate');
+                }
+            }
+            // When user leaves any day: stop day song and restore default Perfect song.
+            if (event.data === 'restoreDefaultMusic') {
+                if (audioDom) {
+                    audioDom.pause();
+                    audioDom.currentTime = 0;
+                    audioDom.src = encodeURI('./assets/Perfect (Acoustic).mp3');
+                    audioDom.load();
+                    audioDom.play().catch(function () { });
+                }
+                if (musicCloseDom) {
+                    musicCloseDom.classList.add('rotate');
                 }
             }
         }, false);

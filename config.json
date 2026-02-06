@@ -3,9 +3,14 @@
     "spName": "Shraddha Ji",
     "instagramUsername": "a.m_3108",
     "instagramProfileName": "Atul Mishra",
+    "email": {
+        "receiverEmail": "mishraatul88.am@gmail.com",
+        "senderEmail": "mishraatul88.am@gmail.com",
+        "formspreeEndpoint": "https://formspree.io/f/mbdybqrz"
+    },
     "pagePasswords": {
-        "rose.html": "1234",
-        "propose.html": "1234",
+        "rose.html": "02082025",
+        "propose.html": "Madam Ji",
         "chocolate.html": "1234",
         "teddy.html": "1234",
         "promise.html": "1234",
@@ -14,8 +19,8 @@
         "valentine.html": "1234"
     },
     "pageHints": {
-        "rose.html": "Our special number",
-        "propose.html": "Our special number",
+        "rose.html": "When we met First? (e.g. 7th Feb 2026 then 07022026)",
+        "propose.html": "What name I have given to you? (e.g. Shraddha Ji,  After name then put space then Ji)",
         "chocolate.html": "Our special number",
         "teddy.html": "Our special number",
         "promise.html": "Our special number",

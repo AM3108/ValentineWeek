@@ -1,5 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Protest+Revolution&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Bonheur+Royale&family=Poppins:wght@300;400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700&display=swap');
 
 * {
     margin: 0;
@@ -26,7 +27,7 @@ body {
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    padding: 0rem 1rem;
+    padding: 0.5rem 0.75rem;
 }
 
 .main h2 {
@@ -36,9 +37,9 @@ body {
     transform: rotate(-2deg);
     border-bottom: 2px dotted var(--white);
     border-radius: 1rem;
-    padding: 0.5rem;
-    margin-bottom: 1rem;
-    margin-top: 1.5rem;
+    padding: 0.4rem 0.5rem;
+    margin-bottom: 0.75rem;
+    margin-top: 1rem;
 }
 
 :root {
@@ -51,19 +52,25 @@ body {
 .quote-heading {
     font-size: 2rem;
     backdrop-filter: blur(10px);
-    padding: 1rem;
+    padding: 0.5rem 0.75rem;
+}
+
+/* Rose Day: no blur on heading so background (face) stays sharp */
+.rose-right .quote-heading {
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    background: rgba(0, 0, 0, 0.25);
 }
 
 .hero {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 0.3rem 5rem;
+    padding: 0.5rem 1.25rem;
     margin: 0.1rem;
     height: 80vh;
     width: 100vw;
     position: relative;
-    /* Ensure the back arrow is positioned relative to the hero section */
 }
 
 .left {
@@ -72,9 +79,8 @@ body {
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
-    /* Center the background image */
     height: 100%;
-    padding: 1rem 1rem;
+    padding: 0.75rem;
     font-size: 1.4rem;
     border-top-left-radius: 1rem;
     /* Rounded top-left corner */
@@ -96,10 +102,10 @@ h3 {
 }
 
 .right {
-    margin-left: 5px;
+    margin-left: 4px;
     height: 100%;
     width: 100%;
-    padding: 0.5rem;
+    padding: 0.5rem 0.75rem;
     overflow: hidden;
     overflow-y: scroll;
     text-align: center;
@@ -116,28 +122,180 @@ h3 {
     will-change: transform;
 }
 
-/* Specific background for propose.html */
-.propose-right {
-    background: url(./assets/nikola-mihajloski-LPMoA5AaMBI-unsplash.jpg);
-    background-repeat: no-repeat;
-    background-size: cover;
-    border-top-right-radius: 1rem;
-    /* Rounded top-right corner */
-    border-bottom-right-radius: 1rem;
-    /* Rounded bottom-right corner */
-    background-position: center;
+/* Quote pages: flex layout for full-screen quote + express section (same as Rose Day) */
+.propose-right,
+.chocolate-right,
+.teddy-right,
+.promise-right,
+.hug-right,
+.kiss-right,
+.valentine-right {
+    display: flex;
+    flex-direction: column;
 }
 
-/* Specific background for rose.html */
-.rose-right {
-    background: url(./assets/biel-morro-kcKiBcDTJt4-unsplash.jpg);
-    background-repeat: no-repeat;
-    background-size: cover;
+/* Propose Day: same layout as Rose Day - background image + quiz game */
+.propose-right {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    background: transparent;
     border-top-right-radius: 1rem;
-    /* Rounded top-right corner */
     border-bottom-right-radius: 1rem;
-    /* Rounded bottom-right corner */
-    background-position: center;
+    overflow-x: hidden;
+    overflow-y: auto;
+    min-height: 0;
+}
+
+.propose-right::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    background: url(./assets/1000214597.jpg) center / cover no-repeat;
+    filter: blur(4px);
+    -webkit-filter: blur(4px);
+    opacity: 0.92;
+}
+
+.propose-right .back-container,
+.propose-right .quote-heading,
+.propose-right .propose-game-wrap,
+.propose-right .quotes {
+    position: relative;
+    z-index: 1;
+}
+
+.propose-right .quote {
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    background: rgba(0, 0, 0, 0.35);
+}
+
+/* Propose Day quiz game */
+.propose-game-wrap {
+    position: relative;
+    z-index: 2;
+    margin: 0.75rem 0;
+    padding: 1.25rem;
+    background: #ffffff !important;
+    border: 3px solid #e91e8c;
+    border-radius: 16px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+}
+
+.propose-game-title {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #c2185b !important;
+    margin-bottom: 0.75rem;
+    text-align: center;
+}
+
+.propose-quiz-question {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #333;
+    text-align: center;
+    margin-bottom: 0.5rem;
+}
+
+.propose-quiz-options {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin-top: 1rem;
+}
+
+.propose-option {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1rem;
+    font-weight: 600;
+    padding: 0.75rem 1.25rem;
+    border: 3px solid #bdbdbd;
+    border-radius: 12px;
+    background: #f5f5f5 !important;
+    color: #333;
+    cursor: pointer;
+    transition: background 0.2s, border-color 0.2s, transform 0.15s;
+    text-align: left;
+}
+
+.propose-option:hover:not(:disabled) {
+    background: #ffebee !important;
+    border-color: #e91e8c;
+    transform: scale(1.02);
+}
+
+.propose-option:disabled {
+    cursor: default;
+}
+
+.propose-option.option-correct {
+    background: #c8e6c9 !important;
+    border-color: #2e7d32;
+    color: #1b5e20;
+}
+
+.propose-option.option-wrong {
+    background: #ffcdd2 !important;
+    border-color: #c62828;
+    color: #b71c1c;
+}
+
+.propose-quiz-status {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #c2185b !important;
+    text-align: center;
+    margin-top: 0.75rem;
+    min-height: 1.5em;
+}
+
+.quotes.propose-hidden-until-game {
+    display: none !important;
+}
+
+/* Specific background for rose.html - scrollable on desktop */
+.rose-right {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    background: transparent;
+    border-top-right-radius: 1rem;
+    border-bottom-right-radius: 1rem;
+    overflow-x: hidden;
+    overflow-y: auto;
+    min-height: 0;
+}
+
+.rose-right::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    background: url(./assets/rose-day-background.png) center 25% / cover no-repeat;
+    filter: blur(4px);
+    -webkit-filter: blur(4px);
+    opacity: 0.92;
+}
+
+.rose-right .back-container,
+.rose-right .quote-heading,
+.rose-right .rose-game-wrap,
+.rose-right .quotes {
+    position: relative;
+    z-index: 1;
+}
+
+/* Rose Day: no blur on quote cards so text stays sharp */
+.rose-right .quote {
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    background: rgba(0, 0, 0, 0.35);
 }
 
 /* Specific background for chocolate.html */
@@ -223,11 +381,170 @@ lord-icon {
     will-change: transform;
 }
 
+/* Full-screen quote tile with margin (e.g. Rose Day single quote) */
+.quotes.quotes-fullscreen {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    width: 100%;
+    padding: 1rem 1.5rem;
+    gap: 1rem;
+    flex: 1;
+    min-height: 0;
+}
+
+/* Quote box height = message height for all quotes */
+.quotes.quotes-fullscreen .quote {
+    flex: 0 0 auto;
+    height: auto;
+    min-height: 8rem;
+    width: 100%;
+    max-width: 100%;
+    margin: 0;
+    padding: 1.25rem 1.5rem;
+    cursor: default;
+    aspect-ratio: auto;
+    box-sizing: border-box;
+    white-space: pre-line;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.35rem;
+}
+
+.quotes.quotes-fullscreen .quote .quote-typewriter-text {
+    white-space: pre-line;
+    text-align: center;
+}
+
+.typewriter-cursor {
+    animation: typewriter-blink 0.7s step-end infinite;
+    margin-left: 1px;
+}
+
+@keyframes typewriter-blink {
+    50% { opacity: 0; }
+}
+
+.express-section {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+}
+
+.express-textarea {
+    width: 100%;
+    max-width: 100%;
+    min-height: 100px;
+    padding: 0.75rem;
+    border-radius: 0.75rem;
+    border: 1.5px solid rgba(255, 255, 255, 0.7);
+    background: rgba(0, 0, 0, 0.3);
+    color: var(--white);
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+    font-size: 1rem;
+    resize: vertical;
+    box-sizing: border-box;
+}
+
+.express-textarea::placeholder {
+    color: rgba(255, 255, 255, 0.6);
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+}
+
+.express-textarea:focus {
+    outline: none;
+    border-color: var(--primary);
+}
+
+.express-btn {
+    align-self: flex-end;
+    padding: 0.6rem 1.5rem;
+    border-radius: 999px;
+    border: none;
+    background: linear-gradient(135deg, var(--secondary), var(--primary));
+    color: var(--white);
+    font-size: 1rem;
+    font-family: inherit;
+    cursor: pointer;
+    transition: filter 0.2s, transform 0.2s;
+}
+
+.express-btn:hover:not(:disabled) {
+    filter: brightness(1.1);
+    transform: translateY(-1px);
+}
+
+.express-btn:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
+/* Success modal (same theme as password modal) */
+.success-modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.success-modal.hidden {
+    display: none;
+}
+
+.success-modal-content {
+    background: rgba(255, 255, 255, 0.12);
+    backdrop-filter: blur(25px);
+    -webkit-backdrop-filter: blur(25px);
+    border-radius: 1.5rem;
+    padding: 1.25rem 1.5rem;
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+    text-align: center;
+    max-width: 320px;
+}
+
+.success-modal-title {
+    color: #fff;
+    font-size: 1.6rem;
+    margin-bottom: 0.5rem;
+}
+
+.success-modal-message {
+    color: #f9f9f9;
+    font-size: 1rem;
+    margin-bottom: 1.25rem;
+}
+
+.success-modal-btn {
+    padding: 0.6rem 1.5rem;
+    border-radius: 999px;
+    border: none;
+    background: linear-gradient(135deg, var(--secondary), var(--primary));
+    color: #fff;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: filter 0.2s, transform 0.2s;
+}
+
+.success-modal-btn:hover {
+    filter: brightness(1.1);
+    transform: translateY(-1px);
+}
+
 .quote {
     border: 1.5px solid #ffffff;
-    /* Change border color to #ff0000 */
-    padding: 1.2rem;
-    margin: 1rem;
+    padding: 1rem;
+    margin: 0.75rem;
     border-radius: 1rem;
     color: var(--white);
     font-family: cursive;
@@ -252,8 +569,7 @@ lord-icon {
     left: 0;
     cursor: pointer;
     z-index: 10;
-    /* Ensure it is above other elements */
-    padding: 0.5rem 1rem;
+    padding: 0.4rem 0.75rem;
     background: rgba(255, 255, 255, 0.2);
     backdrop-filter: blur(10px);
     border-radius: 0 0 10px 0;
@@ -295,14 +611,35 @@ lord-icon {
     transform: rotate(-1deg);
     border-bottom: 2px dotted var(--white);
     border-radius: 1rem;
-    padding: 0.4rem;
+    padding: 0.35rem 0.5rem;
+}
+
+/* Mobile: reduce padding on day pages */
+@media only screen and (max-width: 768px) {
+    .hero {
+        padding: 0.5rem 0.75rem;
+    }
+
+    .quotes.quotes-fullscreen {
+        padding: 0.75rem 1rem;
+        gap: 0.75rem;
+    }
+
+    .quotes.quotes-fullscreen .quote {
+        padding: 1rem 1.25rem;
+    }
+
+    .quote-heading {
+        padding: 0.4rem 0.5rem;
+        font-size: 1.5rem;
+    }
 }
 
 @media only screen and (max-width: 400px) {
     .main {
         height: max-content;
         margin: 0;
-        padding: 1rem;
+        padding: 0.5rem 0.75rem;
     }
 
     .left,
@@ -313,12 +650,13 @@ lord-icon {
     .left {
         border-top-left-radius: 1rem;
         border-top-right-radius: 1rem;
+        padding: 0.5rem;
     }
 
     .hero {
         display: flex;
         flex-direction: column;
-        padding: 2rem 0;
+        padding: 0.75rem 0.5rem;
         margin: 0;
         height: max-content;
     }
@@ -326,14 +664,22 @@ lord-icon {
     .right {
         height: max-content;
         margin: 0;
+        padding: 0.5rem;
         border-bottom-right-radius: 1rem;
         border-bottom-left-radius: 1rem;
-
     }
 
     .quotes {
         display: flex;
         flex-direction: column;
+    }
+
+    .quotes.quotes-fullscreen {
+        padding: 0.5rem 0.75rem;
+    }
+
+    .quotes.quotes-fullscreen .quote {
+        padding: 0.75rem 1rem;
     }
 
     .back {

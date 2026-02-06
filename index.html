@@ -140,6 +140,16 @@
             event.preventDefault();
         }, false);
 
+        // Auto-start music when website opens
+        function tryStartMusic() {
+            audioDom.play().then(function () { musicCloseDom.classList.add('rotate'); }).catch(function () { });
+        }
+        if (audioDom.readyState >= 3) {
+            tryStartMusic();
+        } else {
+            audioDom.addEventListener('canplaythrough', function () { tryStartMusic(); }, { once: true });
+        }
+
         // Listen for a message from child pages (e.g. index.html) to start the music.
         window.addEventListener('message', function (e) {
             if (e.data === 'startMusic') {

@@ -6,6 +6,14 @@ Valentine Project is a responsive web application designed to celebrate love thr
 
 Check out the live site here: [Live Valentine Project](https://am3108.github.io/ValentineWeek/)
 
+### Make the site live on GitHub Pages (one-time setup)
+
+1. Open your repo: **https://github.com/AM3108/ValentineWeek**
+2. Go to **Settings** → **Pages** (under "Code and automation").
+3. Under **Build and deployment** → **Source**, choose **Deploy from a branch**.
+4. Under **Branch**, select **main** and folder **/ (root)**.
+5. Click **Save**. In a minute or two your site will be live at **https://am3108.github.io/ValentineWeek/**.
+
 ## Features
 
 - **Responsive Design:**  

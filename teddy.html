@@ -48,7 +48,21 @@
                     </a>
                 </div>
                 <h3 class="quote-heading">Special Quotes for my special one on the Teddy Day! ❤️</h3>
-                <div class="quotes quotes-fullscreen"></div>
+                <div class="teddy-game-wrap">
+                    <p class="teddy-game-title" id="teddy-game-title">Catch 10 teddies! 🧸</p>
+                    <div class="teddy-catch-area" id="teddy-catch-area">
+                        <div class="teddy-bag" id="teddy-bag"></div>
+                    </div>
+                    <p class="teddy-catch-status" id="teddy-catch-status">Caught: 0 / 10</p>
+                </div>
+                <div class="teddy-reveal-wrap teddy-reveal-hidden" id="teddy-reveal-wrap">
+                    <div class="teddy-reveal-content">
+                        <img src="./assets/Screenshot 2026-02-08 131618.png" alt="Teddy Day" class="teddy-reveal-img" />
+                        <p class="teddy-reveal-msg">Madam ji, please manage with this for now. Next year, I'll gift you a Tatya Bichchu 😄 or I will be your teddy</p>
+                        <p class="teddy-reveal-timer" id="teddy-reveal-timer"></p>
+                    </div>
+                </div>
+                <div class="quotes quotes-fullscreen teddy-hidden-until-game" id="teddy-quotes-area"></div>
             </div>
         </div>
         <div class="copyright-container">
@@ -58,6 +72,165 @@
     <script src="./express-feelings.js"></script>
     <script src="./quotesTeddyDay.js"></script>
     <script src="https://cdn.lordicon.com/lordicon.js"></script>
+    <script>
+        (function () {
+            var area = document.getElementById('teddy-catch-area');
+            var bag = document.getElementById('teddy-bag');
+            var statusEl = document.getElementById('teddy-catch-status');
+            if (!area || !bag || !statusEl) return;
+
+            var score = 0;
+            var needed = 10;
+            var bagLeft = 50;
+            var bagWidth = 52;
+            var areaWidth = area.offsetWidth;
+            var areaHeight = area.offsetHeight;
+            var teddies = [];
+            var spawnId = null;
+            var animId = null;
+            var gameOver = false;
+            var FALL_SPEED = 1.8;
+            var SPAWN_INTERVAL = 1400;
+
+            function updateBagPos() {
+                areaWidth = area.offsetWidth;
+                var leftPx = (areaWidth - bagWidth) * (bagLeft / 100);
+                bag.style.left = leftPx + 'px';
+                bag.style.transform = 'translateX(0)';
+            }
+
+            function moveBag(delta) {
+                if (gameOver) return;
+                bagLeft = Math.max(0, Math.min(100, bagLeft + delta));
+                updateBagPos();
+            }
+
+            function getBagRect() {
+                areaWidth = area.offsetWidth;
+                areaHeight = area.offsetHeight;
+                var left = (areaWidth - bagWidth) * (bagLeft / 100);
+                return { left: left, right: left + bagWidth, top: areaHeight - 12 - 36, bottom: areaHeight - 12 };
+            }
+
+            function spawnItem() {
+                if (gameOver) return;
+                areaWidth = area.offsetWidth;
+                var w = 36;
+                var h = 36;
+                var left = Math.random() * (areaWidth - w);
+                var isSkull = Math.random() < 0.25;
+                var emoji = isSkull ? '💀' : '🧸';
+                var type = isSkull ? 'skull' : 'teddy';
+                var el = document.createElement('div');
+                el.className = isSkull ? 'teddy-teddy-fall teddy-skull-fall' : 'teddy-teddy-fall';
+                el.style.left = left + 'px';
+                el.style.top = '0';
+                el.textContent = emoji;
+                area.appendChild(el);
+                teddies.push({ el: el, top: 0, left: left, w: w, h: h, type: type });
+            }
+
+            function runGame() {
+                if (gameOver) return;
+                areaWidth = area.offsetWidth;
+                areaHeight = area.offsetHeight;
+                var bagR = getBagRect();
+                for (var i = teddies.length - 1; i >= 0; i--) {
+                    var t = teddies[i];
+                    t.top += FALL_SPEED;
+                    t.el.style.top = t.top + 'px';
+                    if (t.top + t.h >= bagR.top && t.top <= bagR.bottom && t.left + t.w >= bagR.left && t.left <= bagR.right) {
+                        t.el.remove();
+                        teddies.splice(i, 1);
+                        if (t.type === 'skull') {
+                            score = 0;
+                            statusEl.textContent = 'Ohh no, madam ji, start again😄';
+                            setTimeout(function () { statusEl.textContent = 'Caught: 0 / ' + needed; }, 800);
+                        } else {
+                            score++;
+                            statusEl.textContent = 'Caught: ' + score + ' / ' + needed;
+                        }
+                        if (score >= needed) {
+                            gameOver = true;
+                            if (spawnId) clearInterval(spawnId);
+                            if (animId) cancelAnimationFrame(animId);
+                            statusEl.textContent = 'You caught 10! 🧸';
+                            setTimeout(function () {
+                                statusEl.textContent = '3...';
+                                setTimeout(function () {
+                                    statusEl.textContent = '2...';
+                                    setTimeout(function () {
+                                        statusEl.textContent = '1...';
+                                        setTimeout(function () {
+                                            var gameWrap = document.querySelector('.teddy-game-wrap');
+                                            var revealWrap = document.getElementById('teddy-reveal-wrap');
+                                            var quotesArea = document.getElementById('teddy-quotes-area');
+                                            if (gameWrap) gameWrap.style.display = 'none';
+                                            if (revealWrap) {
+                                                revealWrap.classList.remove('teddy-reveal-hidden');
+                                                var timerEl = document.getElementById('teddy-reveal-timer');
+                                                var sec = 15;
+                                                function tick() {
+                                                    if (timerEl) timerEl.textContent = sec > 0 ? sec + '...' : '';
+                                                    if (sec <= 0) {
+                                                        if (revealWrap) revealWrap.classList.add('teddy-reveal-hidden');
+                                                        if (quotesArea) quotesArea.classList.remove('teddy-hidden-until-game');
+                                                        if (typeof window.startTeddyQuoteTypewriter === 'function') window.startTeddyQuoteTypewriter();
+                                                        return;
+                                                    }
+                                                    sec--;
+                                                    setTimeout(tick, 1000);
+                                                }
+                                                tick();
+                                            } else {
+                                                if (quotesArea) quotesArea.classList.remove('teddy-hidden-until-game');
+                                                if (typeof window.startTeddyQuoteTypewriter === 'function') window.startTeddyQuoteTypewriter();
+                                            }
+                                        }, 1000);
+                                    }, 1000);
+                                }, 1000);
+                            }, 800);
+                            return;
+                        }
+                    } else if (t.top > areaHeight) {
+                        t.el.remove();
+                        teddies.splice(i, 1);
+                    }
+                }
+                animId = requestAnimationFrame(runGame);
+            }
+
+            document.addEventListener('keydown', function (e) {
+                if (e.key === 'ArrowLeft') { e.preventDefault(); moveBag(-8); }
+                if (e.key === 'ArrowRight') { e.preventDefault(); moveBag(8); }
+            });
+
+            area.addEventListener('touchmove', function (e) {
+                e.preventDefault();
+                if (e.touches.length && !gameOver) {
+                    var rect = area.getBoundingClientRect();
+                    var x = e.touches[0].clientX - rect.left;
+                    bagLeft = Math.max(0, Math.min(100, (x / rect.width) * 100));
+                    updateBagPos();
+                }
+            }, { passive: false });
+
+            area.addEventListener('mousemove', function (e) {
+                if (e.buttons !== 1 || gameOver) return;
+                var rect = area.getBoundingClientRect();
+                var x = e.clientX - rect.left;
+                bagLeft = Math.max(0, Math.min(100, (x / rect.width) * 100));
+                updateBagPos();
+            });
+
+            areaWidth = area.offsetWidth;
+            areaHeight = area.offsetHeight;
+            updateBagPos();
+            spawnId = setInterval(spawnItem, SPAWN_INTERVAL);
+            spawnItem();
+            runGame();
+        })();
+    </script>
     <script>
         if (window.parent !== window) {
             window.parent.postMessage({ type: 'playDaySong', src: './assets/Pehla Pyaar(MP3_160K).mp3' }, '*');

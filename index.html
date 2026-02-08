@@ -82,6 +82,9 @@
 </head>
 
 <body>
+    <script>
+    (function(){var s=location.search;if(s.indexOf('_=')===-1){location.replace(location.pathname+(s?s+'&':'?')+'_='+Date.now());return;}var c=s.replace(/[?&]_=\d+/g,'').replace(/^&/,'')||'';var u=location.pathname+(c?'?'+c:'');if(u!==location.pathname+s)history.replaceState(null,'',u);})();
+    </script>
     <!-- Content iframe where your pages (index.html, rose.html, etc.) will be loaded -->
     <iframe src="main.html" style="width: 100%; height: 100vh; border: none;" id="content-frame"></iframe>
 

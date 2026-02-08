@@ -5,7 +5,7 @@ const spName = document.querySelector("#spname");
 const roseDay = [
     `Dear Madam Ji,
 
-On 2nd August 2025, I was not prepared for that day at all.
+On 3rd August 2025, I was not prepared for that day at all.
 For me, it felt like a usual day—meeting a family member and then going about my work.
 But that day turned out to be something far more special.
 

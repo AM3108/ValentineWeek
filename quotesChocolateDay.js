@@ -3,11 +3,67 @@ const fpName = document.querySelector("#fpname");
 const spName = document.querySelector("#spname");
 
 const chocolateDayQuotes = [
-  `You are the sweetest chocolate in the box of my life,
-  Adding flavor to every moment,
-  Making everything delightful and nice.
-  Happy Chocolate Day, my love!`
+  `Dear Madam Ji,
+
+Today is Chocolate Day, and I know you don’t really like chocolate or sugar.
+But as Ayurveda and doctors say, organic jaggery is good for health—pure, natural, and nourishing.
+So maybe I won’t be chocolate in your life… I want to be jaggery instead.
+
+And don’t worry at all—
+since you don’t like chocolate, I will be the one who eats all your chocolates 😉,
+just like I promise to take away all your worries in the future,
+so your days stay lighter and your smile stays constant.
+
+A few lines just for you:
+
+“Aapki muskaan se har din meetha lagega,
+Aap saath hongi toh har pal khaas lagega.
+Chocolate ho ya na ho zindagi mein kabhi,
+Aapka saath hi mere liye sabse meetha rahega.”
+
+Happy Chocolate Day, Madam Ji 🍫
+Today and always, my only wish is to add sweetness to your life.`
 ];
+
+function typewriterChocolate(text, textEl, speedMs, onComplete) {
+  textEl.textContent = '';
+  let index = 0;
+  function tick() {
+    if (index < text.length) {
+      textEl.textContent += text[index];
+      index++;
+      setTimeout(tick, speedMs);
+    } else {
+      if (onComplete) onComplete();
+    }
+  }
+  tick();
+}
+
+// Single fullscreen quote with typewriter container (no link), same pattern as Rose Day.
+if (quotesDiv && chocolateDayQuotes.length > 0) {
+  const para = document.createElement('p');
+  para.classList.add('quote');
+  const textSpan = document.createElement('span');
+  textSpan.className = 'quote-typewriter-text';
+  para.appendChild(textSpan);
+  quotesDiv.appendChild(para);
+}
+
+window.startChocolateQuoteTypewriter = function () {
+  const quoteEl = quotesDiv && quotesDiv.querySelector('.quote');
+  const textEl = quoteEl && quoteEl.querySelector('.quote-typewriter-text');
+  if (!textEl || !chocolateDayQuotes[0]) return;
+  const cursor = document.createElement('span');
+  cursor.className = 'typewriter-cursor';
+  cursor.setAttribute('aria-hidden', 'true');
+  cursor.textContent = '|';
+  quoteEl.appendChild(cursor);
+  typewriterChocolate(chocolateDayQuotes[0], textEl, 65, function () {
+    if (cursor.parentNode) cursor.remove();
+  });
+};
+
 // ,
 //   `Just like chocolate melts in the mouth,
 //   Your love melts my heart.
@@ -57,36 +113,12 @@ const chocolateDayQuotes = [
 fetch('config.json')
   .then(response => response.json())
   .then(config => {
-    // Set names from configuration.
     fpName.innerText = config.fpName;
     spName.innerText = config.spName;
-
-    // Update Instagram profile link and name.
     const instagramProfileLink = document.getElementById('instagramProfileLink');
     const instagramProfileNameElement = document.getElementById('instagramProfileName');
     instagramProfileLink.href = `https://instagram.com/${config.instagramUsername}`;
     instagramProfileNameElement.textContent = config.instagramProfileName;
-
-    // Build quote links from chocolateDayQuotes.
-    const quotesNr = chocolateDayQuotes.length;
-    for (let i = 0; i < quotesNr; i++) {
-      const link = document.createElement('a');
-      link.setAttribute('href', 'card.html?source=chocolate');
-      const para = document.createElement("p");
-      para.classList.add("quote");
-      para.innerText = chocolateDayQuotes[i];
-      link.appendChild(para);
-      quotesDiv.appendChild(link);
-    }
-
-    // Add click listener on each quote to save the chosen quote to localStorage.
-    const quoteDivs = document.querySelectorAll(".quote");
-    quoteDivs.forEach(quote => {
-      quote.addEventListener('click', function (e) {
-        const chosenQuote = e.target.innerText;
-        localStorage.setItem("chosenQuote", chosenQuote);
-      });
-    });
 
     if (typeof initExpressFeelings === 'function') {
       initExpressFeelings(quotesDiv, { subject: 'Chocolate Day - Express your feelings' });

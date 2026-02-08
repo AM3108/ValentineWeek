@@ -45,7 +45,21 @@
                     </a>
                 </div>
                 <h3 class="quote-heading">Special Quotes for my special one on the Chocolate Day! ❤️</h3>
-                <div class="quotes quotes-fullscreen"></div>
+                <div class="chocolate-game-wrap">
+                    <p class="chocolate-game-title" id="chocolate-quiz-title">Question 1 of 3</p>
+                    <p class="chocolate-quiz-question" id="chocolate-quiz-question"></p>
+                    <div class="chocolate-quiz-options" id="chocolate-quiz-options"></div>
+                    <p class="chocolate-quiz-status" id="chocolate-quiz-status"></p>
+                </div>
+                <div class="chocolate-reveal-wrap chocolate-reveal-hidden" id="chocolate-reveal-wrap">
+                    <div class="chocolate-reveal-content">
+                        <img src="./assets/lovechocolate.png" alt="Dairy Milk" class="chocolate-reveal-bar" />
+                        <span class="chocolate-heart-pop" aria-hidden="true">❤</span>
+                        <p class="chocolate-for-you">This is for you</p>
+                        <p class="chocolate-reveal-timer" id="chocolate-reveal-timer"></p>
+                    </div>
+                </div>
+                <div class="quotes quotes-fullscreen chocolate-hidden-until-game" id="chocolate-quotes-area"></div>
             </div>
         </div>
         <div class="copyright-container">
@@ -55,6 +69,106 @@
     <script src="./express-feelings.js"></script>
     <script src="./quotesChocolateDay.js"></script>
     <script src="https://cdn.lordicon.com/lordicon.js"></script>
+    <script>
+        (function () {
+            var quizData = [
+                { q: 'Which equation graphs a symmetric heart?', options: ['(x² + y² − 1)³ − x²y³ = 0', 'x² + y² = 1'], correct: 0 },
+                { q: 'Complete the heart equation: (x² + y² − 1)³ − x²y³ = ?', options: ['0', '1'], correct: 0 },
+                { q: 'The heart curve is symmetric about:', options: ['y-axis', 'x-axis only'], correct: 0 }
+            ];
+            var currentQ = 0;
+            var titleEl = document.getElementById('chocolate-quiz-title');
+            var questionEl = document.getElementById('chocolate-quiz-question');
+            var optionsEl = document.getElementById('chocolate-quiz-options');
+            var statusEl = document.getElementById('chocolate-quiz-status');
+            if (!titleEl || !questionEl || !optionsEl || !statusEl) return;
+
+            function renderQuestion() {
+                var d = quizData[currentQ];
+                titleEl.textContent = 'Question ' + (currentQ + 1) + ' of 3';
+                questionEl.textContent = d.q;
+                optionsEl.innerHTML = '';
+                d.options.forEach(function (text, idx) {
+                    var btn = document.createElement('button');
+                    btn.type = 'button';
+                    btn.className = 'chocolate-option';
+                    btn.textContent = (idx === 0 ? 'A - ' : 'B - ') + text;
+                    btn.dataset.index = idx;
+                    btn.addEventListener('click', handleOption);
+                    optionsEl.appendChild(btn);
+                });
+                statusEl.textContent = 'Select an option';
+            }
+
+            function handleOption(e) {
+                var btn = e.currentTarget;
+                if (btn.disabled) return;
+                var d = quizData[currentQ];
+                var chosen = parseInt(btn.dataset.index, 10);
+                if (chosen === d.correct) {
+                    btn.classList.add('option-correct');
+                    var allBtns = optionsEl.querySelectorAll('.chocolate-option');
+                    for (var i = 0; i < allBtns.length; i++) allBtns[i].disabled = true;
+                    statusEl.textContent = 'Correct! ✓';
+                    setTimeout(function () {
+                        currentQ++;
+                        if (currentQ < quizData.length) {
+                            renderQuestion();
+                        } else {
+                            statusEl.textContent = 'All correct! 🍫❤️';
+                            setTimeout(function () {
+                                statusEl.textContent = 'You solved the heart equation! So sweet! 🎉';
+                                setTimeout(function () {
+                                    statusEl.textContent = '3...';
+                                    setTimeout(function () {
+                                        statusEl.textContent = '2...';
+                                        setTimeout(function () {
+                                            statusEl.textContent = '1...';
+                                            setTimeout(function () {
+                                                var gameWrap = document.querySelector('.chocolate-game-wrap');
+                                                var revealWrap = document.getElementById('chocolate-reveal-wrap');
+                                                var quotesArea = document.getElementById('chocolate-quotes-area');
+                                                var timerEl = document.getElementById('chocolate-reveal-timer');
+                                                if (gameWrap) gameWrap.style.display = 'none';
+                                                if (revealWrap) {
+                                                    revealWrap.classList.remove('chocolate-reveal-hidden');
+                                                    var sec = 5;
+                                                    function tick() {
+                                                        if (timerEl) timerEl.textContent = sec > 0 ? sec + '...' : '';
+                                                        if (sec <= 0) {
+                                                            if (revealWrap) revealWrap.classList.add('chocolate-reveal-hidden');
+                                                            if (quotesArea) quotesArea.classList.remove('chocolate-hidden-until-game');
+                                                            if (typeof window.startChocolateQuoteTypewriter === 'function') window.startChocolateQuoteTypewriter();
+                                                            return;
+                                                        }
+                                                        sec--;
+                                                        setTimeout(tick, 1000);
+                                                    }
+                                                    tick();
+                                                } else {
+                                                    if (quotesArea) quotesArea.classList.remove('chocolate-hidden-until-game');
+                                                    if (typeof window.startChocolateQuoteTypewriter === 'function') window.startChocolateQuoteTypewriter();
+                                                }
+                                            }, 1000);
+                                        }, 1000);
+                                    }, 1000);
+                                }, 2000);
+                            }, 1500);
+                        }
+                    }, 1200);
+                } else {
+                    btn.classList.add('option-wrong');
+                    statusEl.textContent = 'Wrong! Try again.';
+                    setTimeout(function () {
+                        btn.classList.remove('option-wrong');
+                        statusEl.textContent = 'Select an option';
+                    }, 1000);
+                }
+            }
+
+            renderQuestion();
+        })();
+    </script>
     <script>
         if (window.parent !== window) {
             window.parent.postMessage({ type: 'playDaySong', src: './assets/Chashni (From _Bharat_)(MP3_160K).mp3' }, '*');

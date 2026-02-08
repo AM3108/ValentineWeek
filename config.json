@@ -9,9 +9,9 @@
         "formspreeEndpoint": "https://formspree.io/f/mbdybqrz"
     },
     "pagePasswords": {
-        "rose.html": "02082025",
+        "rose.html": "03082025",
         "propose.html": "Madam Ji",
-        "chocolate.html": "1234",
+        "chocolate.html": "Jhumka",
         "teddy.html": "1234",
         "promise.html": "1234",
         "hug.html": "1234",
@@ -21,7 +21,7 @@
     "pageHints": {
         "rose.html": "When we met First? (e.g. 7th Feb 2026 then 07022026)",
         "propose.html": "What name I have given to you? (e.g. Shraddha Ji,  After name then put space then Ji)",
-        "chocolate.html": "Our special number",
+        "chocolate.html": "What did I buy for you in Udaipur? (6 letter word start with J and end with A)",
         "teddy.html": "Our special number",
         "promise.html": "Our special number",
         "hug.html": "Our special number",

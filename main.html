@@ -11,6 +11,37 @@
     <link rel="stylesheet" href="quotes.css">
     <link rel="stylesheet"
         href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    <style>
+        .main-page-music {
+            position: fixed;
+            bottom: 3.5vh;
+            right: 3.5vh;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            z-index: 10000;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.4);
+        }
+        .main-page-music .main-music-icon {
+            font-size: 24px;
+            color: #fff;
+            pointer-events: none;
+            animation: main-music-rotate 1.2s linear infinite;
+            animation-play-state: paused;
+        }
+        .main-page-music .main-music-icon.rotate {
+            animation-play-state: running;
+        }
+        @keyframes main-music-rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+    </style>
 </head>
 
 <body>
@@ -68,7 +99,7 @@
                     </div>
                 </div>
             </a>
-            <a href="promise.html" class="day-link" data-date="2026-02-11">
+            <a href="promise.html" class="day-link" data-date="2025-02-11">
                 <div class="promise-day day">
                     <div class="icon">
                         <lord-icon src="https://cdn.lordicon.com/ibufipbp.json" trigger="hover"></lord-icon>
@@ -122,6 +153,14 @@
         </div>
     </div>
 
+    <!-- Music control when main.html is opened directly (not in iframe) -->
+    <div id="main-page-music" class="main-page-music" style="display: none;" title="Toggle music" aria-label="Toggle music">
+        <span class="material-symbols-outlined main-music-icon" aria-hidden="true">music_note</span>
+        <audio id="main-page-audio" preload="auto" loop>
+            <source src="./assets/Perfect (Acoustic).mp3" type="audio/mp3" />
+        </audio>
+    </div>
+
     <!-- Password Modal -->
     <div id="password-modal" class="password-modal hidden">
         <div class="password-modal-content">
@@ -139,6 +178,31 @@
 
     <script src="https://cdn.lordicon.com/lordicon.js"></script>
     <script>
+        (function () {
+            if (window !== window.top) return;
+            var musicEl = document.getElementById('main-page-music');
+            var audioEl = document.getElementById('main-page-audio');
+            var iconEl = musicEl && musicEl.querySelector('.main-music-icon');
+            if (!musicEl || !audioEl || !iconEl) return;
+            musicEl.style.display = 'flex';
+            function tryPlay() {
+                audioEl.play().then(function () { iconEl.classList.add('rotate'); }).catch(function () {});
+            }
+            musicEl.addEventListener('click', function (e) {
+                e.preventDefault();
+                if (audioEl.paused) {
+                    audioEl.play().then(function () { iconEl.classList.add('rotate'); }).catch(function () {});
+                } else {
+                    audioEl.pause();
+                    iconEl.classList.remove('rotate');
+                }
+            });
+            document.body.addEventListener('click', function firstClick() {
+                document.body.removeEventListener('click', firstClick);
+                tryPlay();
+            }, { once: true });
+            audioEl.addEventListener('canplaythrough', function () { tryPlay(); }, { once: true });
+        })();
         document.addEventListener('DOMContentLoaded', function () {
             // Fetch config.json and update Instagram profile link + passwords
             fetch('config.json')

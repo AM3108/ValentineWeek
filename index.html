@@ -14,39 +14,34 @@
         href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
     <style>
         .music {
-            width: 35px;
-            height: 35px;
+            width: 44px;
+            height: 44px;
+            min-width: 44px;
+            min-height: 44px;
             position: fixed;
-            top: 3.5vh;
-            /* Default for larger screens: top right */
+            bottom: 3.5vh;
             right: 3.5vh;
             border-radius: 50%;
-            background-color: rgba(0, 0, 0, 0.6);
+            background-color: rgba(0, 0, 0, 0.5);
             display: flex;
             justify-content: center;
             align-items: center;
             cursor: pointer;
-            z-index: 10000;
+            z-index: 2147483647;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.5);
         }
 
-        /* For mobile devices, reposition the music element to the bottom right */
-        @media only screen and (max-width: 768px) {
-            .music {
-                top: auto;
-                bottom: 3.5vh;
-                right: 3.5vh;
-            }
-        }
-
-        .music>.iconfont {
-            font-size: 19px;
+        .music > .iconfont,
+        .music > .music-close {
+            font-size: 26px;
             color: #fff;
             cursor: pointer;
             animation: rotating 1.2s linear infinite;
             animation-play-state: paused;
         }
 
-        .music>.iconfont.rotate {
+        .music > .iconfont.rotate,
+        .music > .music-close.rotate {
             animation-play-state: running;
         }
 
@@ -89,8 +84,8 @@
     <iframe src="main.html" style="width: 100%; height: 100vh; border: none;" id="content-frame"></iframe>
 
     <!-- Music element positioned based on screen size -->
-    <div class="music">
-        <i class="iconfont music-close">&#xea28;</i>
+    <div class="music" title="Toggle music" aria-label="Toggle music">
+        <span class="material-symbols-outlined music-close" aria-hidden="true">music_note</span>
         <!-- Audio element without autoplay and muted attributes -->
         <audio class="audio" preload loop>
             <source src="./assets/Perfect (Acoustic).mp3" type="audio/mp3" />
@@ -143,7 +138,7 @@
             event.preventDefault();
         }, false);
 
-        // Auto-start music when website opens
+        // Auto-start music when website opens (may be blocked by browser until user interaction)
         function tryStartMusic() {
             audioDom.play().then(function () { musicCloseDom.classList.add('rotate'); }).catch(function () { });
         }
@@ -152,6 +147,16 @@
         } else {
             audioDom.addEventListener('canplaythrough', function () { tryStartMusic(); }, { once: true });
         }
+        // If autoplay was blocked, start music on first user click anywhere (e.g. inside iframe)
+        window.addEventListener('message', function (e) {
+            if (e.data === 'startMusic' && audioDom.paused) {
+                tryStartMusic();
+            }
+        }, false);
+        document.documentElement.addEventListener('click', function firstPageClick() {
+            document.documentElement.removeEventListener('click', firstPageClick);
+            if (audioDom.paused) tryStartMusic();
+        }, { once: true });
 
         // Listen for a message from child pages (e.g. index.html) to start the music.
         window.addEventListener('message', function (e) {
@@ -210,10 +215,16 @@
                     audioDom.currentTime = 0;
                     audioDom.src = encodeURI(event.data.src);
                     audioDom.load();
-                    audioDom.play().catch(function () { });
-                }
-                if (musicCloseDom) {
-                    musicCloseDom.classList.add('rotate');
+                    function playWhenReady() {
+                        audioDom.removeEventListener('canplaythrough', playWhenReady);
+                        audioDom.removeEventListener('canplay', playWhenReady);
+                        audioDom.play().then(function () {
+                            if (musicCloseDom) musicCloseDom.classList.add('rotate');
+                        }).catch(function () { });
+                    }
+                    audioDom.addEventListener('canplaythrough', playWhenReady, { once: true });
+                    audioDom.addEventListener('canplay', playWhenReady, { once: true });
+                    if (audioDom.readyState >= 3) playWhenReady();
                 }
             }
             // When user leaves any day: stop day song and restore default Perfect song.

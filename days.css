@@ -699,13 +699,207 @@ h3 {
     min-height: 1.5em;
 }
 
+/* Promise Day: same layout as Rose Day - background 1000216715.jpg + message/video flow */
 .promise-right {
-    background: url(./assets/heart-3905176.jpg);
-    background-repeat: no-repeat;
-    background-size: cover;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    background: transparent;
     border-top-right-radius: 1rem;
     border-bottom-right-radius: 1rem;
-    background-position: center;
+    overflow-x: hidden;
+    overflow-y: auto;
+    min-height: 0;
+}
+
+.promise-right::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    background: url(./assets/1000216715.jpg) center / cover no-repeat;
+    filter: blur(4px);
+    -webkit-filter: blur(4px);
+    opacity: 0.92;
+}
+
+.promise-right .back-container,
+.promise-right .quote-heading,
+.promise-right .promise-game-wrap,
+.promise-right .promise-reveal-wrap,
+.promise-right .quotes {
+    position: relative;
+    z-index: 1;
+}
+
+.promise-right .quote {
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    background: rgba(0, 0, 0, 0.35);
+}
+
+/* Promise Day: first message + 5 sec countdown */
+.promise-game-wrap {
+    position: relative;
+    z-index: 2;
+    margin: 0.75rem 0;
+    padding: 1.25rem;
+    background: rgba(255, 255, 255, 0.95) !important;
+    border: 3px solid #c2185b;
+    border-radius: 16px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+}
+
+.promise-first-msg {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #333;
+    text-align: center;
+    line-height: 1.5;
+    margin-bottom: 1rem;
+    white-space: pre-line;
+}
+
+.promise-countdown {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #c2185b !important;
+    text-align: center;
+    min-height: 1.5em;
+}
+
+/* Promise Day: title + video + retry (after 5 sec) */
+.promise-reveal-wrap {
+    position: relative;
+    z-index: 2;
+    margin: 0.75rem 0;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.promise-reveal-wrap.promise-reveal-hidden {
+    display: none !important;
+}
+
+.promise-reveal-title {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #c2185b !important;
+    text-align: center;
+    margin-bottom: 1rem;
+}
+
+.promise-video-wrap {
+    position: relative;
+    width: 100%;
+    max-width: 320px;
+    border-radius: 12px;
+    overflow: hidden;
+    background: #000;
+    margin-bottom: 0.75rem;
+}
+
+.promise-video-wrap video {
+    width: 100%;
+    height: auto;
+    display: block;
+    cursor: pointer;
+}
+
+.promise-video-controls {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.4rem 0.5rem;
+    background: rgba(0, 0, 0, 0.75);
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.8rem;
+    color: #fff;
+}
+
+.promise-video-time {
+    min-width: 2.5em;
+    text-align: center;
+}
+
+.promise-video-progress {
+    flex: 1;
+    height: 6px;
+    -webkit-appearance: none;
+    appearance: none;
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 3px;
+}
+
+.promise-video-progress::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: #c2185b;
+    cursor: pointer;
+}
+
+.promise-video-progress::-moz-range-thumb {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: #c2185b;
+    cursor: pointer;
+    border: none;
+}
+
+.promise-redirect-msg {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.9rem;
+    color: #c2185b;
+    text-align: center;
+    margin: 0.5rem 0 0;
+}
+
+.promise-redirect-msg.promise-redirect-hidden {
+    display: none !important;
+}
+
+.promise-retry-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    border: 3px solid #c2185b;
+    background: rgba(255, 255, 255, 0.95);
+    color: #c2185b;
+    cursor: pointer;
+    font-size: 1.5rem;
+    margin-top: 0.5rem;
+    transition: transform 0.2s, background 0.2s;
+}
+
+.promise-retry-btn:hover {
+    background: #fce4ec;
+    transform: scale(1.08);
+}
+
+.promise-three-countdown {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #c2185b !important;
+    text-align: center;
+    margin-top: 0.75rem;
+    min-height: 1.5em;
+}
+
+.quotes.promise-hidden-until-game {
+    display: none !important;
 }
 
 .hug-right {

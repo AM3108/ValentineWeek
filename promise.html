@@ -234,23 +234,21 @@ And please don't judge me, because this is exactly what I want and my promise wi
             }
 
             function showPromiseMusicIcon() {
+                if (window.parent !== window) {
+                    window.parent.postMessage({ type: 'playDaySong', src: PROMISE_DAY_SONG }, '*');
+                    return;
+                }
                 var musicEl = document.getElementById('promise-page-music');
                 var audioEl = document.getElementById('promise-page-audio');
                 var iconEl = musicEl && musicEl.querySelector('.promise-music-icon');
                 if (!musicEl || !iconEl) return;
                 musicEl.style.display = 'flex';
-                if (window.parent !== window) {
-                    window.parent.postMessage({ type: 'playDaySong', src: PROMISE_DAY_SONG }, '*');
-                    iconEl.classList.add('rotate');
-                } else if (audioEl) {
+                if (audioEl) {
                     audioEl.play().then(function () { iconEl.classList.add('rotate'); }).catch(function () {});
                 }
                 musicEl.onclick = function (e) {
                     e.preventDefault();
-                    if (window.parent !== window) {
-                        window.parent.postMessage({ type: 'playDaySong', src: PROMISE_DAY_SONG }, '*');
-                        iconEl.classList.add('rotate');
-                    } else if (audioEl) {
+                    if (audioEl) {
                         if (audioEl.paused) {
                             audioEl.play().then(function () { iconEl.classList.add('rotate'); }).catch(function () {});
                         } else {

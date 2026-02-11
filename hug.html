@@ -48,7 +48,15 @@
                     </a>
                 </div>
                 <h3 class="quote-heading">Special Quotes for my special one on the Hug Day! ❤️</h3>
-                <div class="quotes quotes-fullscreen"></div>
+                <div class="hug-game-wrap" id="hug-game-wrap">
+                    <div class="hug-animation-wrap" id="hug-animation-wrap">
+                        <img src="./assets/Snapchat-914251133.jpg" alt="Hug Day" id="hug-animation-img" />
+                        <div class="hug-grayscale-layer" id="hug-grayscale-layer"></div>
+                        <canvas id="hug-scratch-canvas" class="hug-scratch-canvas"></canvas>
+                    </div>
+                    <p class="hug-countdown" id="hug-countdown"></p>
+                </div>
+                <div class="quotes quotes-fullscreen hug-hidden-until-game" id="hug-quotes-area"></div>
             </div>
         </div>
         <div class="copyright-container">
@@ -65,6 +73,148 @@
         window.addEventListener('beforeunload', function () {
             if (window.parent !== window) window.parent.postMessage('restoreDefaultMusic', '*');
         });
+
+        (function () {
+            var gameWrap = document.getElementById('hug-game-wrap');
+            var animationWrap = document.getElementById('hug-animation-wrap');
+            var img = document.getElementById('hug-animation-img');
+            var canvas = document.getElementById('hug-scratch-canvas');
+            var countdownEl = document.getElementById('hug-countdown');
+            var quotesArea = document.getElementById('hug-quotes-area');
+            var COUNTDOWN_SEC = 5;
+            var REVEAL_THRESHOLD = 0.5;
+            var BRUSH_SIZE = 36;
+            var started = false;
+            var scratching = false;
+            var ctx = null;
+
+            function runCountdown(done) {
+                var n = COUNTDOWN_SEC;
+                countdownEl.textContent = n;
+                var t = setInterval(function () {
+                    n--;
+                    if (n > 0) {
+                        countdownEl.textContent = n;
+                    } else {
+                        clearInterval(t);
+                        countdownEl.textContent = '';
+                        if (done) done();
+                    }
+                }, 1000);
+            }
+
+            function showQuotes() {
+                if (gameWrap) gameWrap.style.display = 'none';
+                if (quotesArea) quotesArea.classList.remove('hug-hidden-until-game');
+            }
+
+            var SKETCH_IMG = './assets/Gemini_Generated_Image.png';
+
+            function initCanvas() {
+                if (!canvas || !img) return;
+                var sketchLayer = document.getElementById('hug-grayscale-layer');
+                if (sketchLayer) {
+                    sketchLayer.style.backgroundImage = 'url(' + SKETCH_IMG + ')';
+                }
+                var w = img.offsetWidth;
+                var h = img.offsetHeight;
+                if (w <= 0 || h <= 0) return;
+                canvas.width = w;
+                canvas.height = h;
+                ctx = canvas.getContext('2d');
+                if (!ctx) return;
+                ctx.fillStyle = '#8c8c8c';
+                ctx.fillRect(0, 0, w, h);
+                ctx.fillStyle = 'rgba(255, 255, 255, 0.95)';
+                ctx.font = 'bold 24px Montserrat, sans-serif';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillText('Scratch me', w / 2, h / 2);
+            }
+
+            function getPos(e) {
+                var rect = canvas.getBoundingClientRect();
+                var scaleX = canvas.width / rect.width;
+                var scaleY = canvas.height / rect.height;
+                var clientX = e.touches ? e.touches[0].clientX : e.clientX;
+                var clientY = e.touches ? e.touches[0].clientY : e.clientY;
+                return {
+                    x: (clientX - rect.left) * scaleX,
+                    y: (clientY - rect.top) * scaleY
+                };
+            }
+
+            function scratch(x, y) {
+                if (!ctx) return;
+                ctx.globalCompositeOperation = 'destination-out';
+                ctx.beginPath();
+                ctx.arc(x, y, BRUSH_SIZE / 2, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.globalCompositeOperation = 'source-over';
+            }
+
+            function getScratchedRatio() {
+                if (!ctx || !canvas) return 0;
+                var pixels = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
+                var total = pixels.length / 4;
+                var clear = 0;
+                for (var i = 3; i < pixels.length; i += 4) {
+                    if (pixels[i] < 128) clear++;
+                }
+                return clear / total;
+            }
+
+            function checkReveal() {
+                if (started) return;
+                if (getScratchedRatio() >= REVEAL_THRESHOLD) {
+                    started = true;
+                    var grayLayer = document.getElementById('hug-grayscale-layer');
+                    if (grayLayer) grayLayer.classList.add('hug-to-color');
+                    canvas.style.opacity = '0';
+                    canvas.style.pointerEvents = 'none';
+                    canvas.style.transition = 'opacity 0.4s ease-out';
+                    var colorDuration = 14000;
+                    setTimeout(function () {
+                        runCountdown(showQuotes);
+                    }, colorDuration + 500);
+                }
+            }
+
+            function onDown(e) {
+                e.preventDefault();
+                scratching = true;
+                var p = getPos(e);
+                scratch(p.x, p.y);
+                checkReveal();
+            }
+
+            function onMove(e) {
+                if (!scratching) return;
+                e.preventDefault();
+                var p = getPos(e);
+                scratch(p.x, p.y);
+                checkReveal();
+            }
+
+            function onUp() {
+                scratching = false;
+            }
+
+            if (img) {
+                img.addEventListener('load', initCanvas);
+                if (img.complete) initCanvas();
+            }
+
+            if (canvas) {
+                canvas.addEventListener('mousedown', onDown);
+                canvas.addEventListener('mousemove', onMove);
+                canvas.addEventListener('mouseup', onUp);
+                canvas.addEventListener('mouseleave', onUp);
+                canvas.addEventListener('touchstart', onDown, { passive: false });
+                canvas.addEventListener('touchmove', onMove, { passive: false });
+                canvas.addEventListener('touchend', onUp);
+            }
+        })();
     </script>
 </body>
 

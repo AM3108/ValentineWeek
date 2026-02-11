@@ -88,7 +88,7 @@
         <span class="material-symbols-outlined music-close" aria-hidden="true">music_note</span>
         <!-- Audio element without autoplay and muted attributes -->
         <audio class="audio" preload loop>
-            <source src="./assets/Perfect (Acoustic).mp3" type="audio/mp3" />
+            <source src="./assets/A_Thousand_Years-528635.mp3" type="audio/mp3" />
             Your browser does not support the audio element.
         </audio>
     </div>
@@ -227,12 +227,12 @@
                     if (audioDom.readyState >= 3) playWhenReady();
                 }
             }
-            // When user leaves any day: stop day song and restore default Perfect song.
+            // When user leaves any day: stop day song and restore default song.
             if (event.data === 'restoreDefaultMusic') {
                 if (audioDom) {
                     audioDom.pause();
                     audioDom.currentTime = 0;
-                    audioDom.src = encodeURI('./assets/Perfect (Acoustic).mp3');
+                    audioDom.src = encodeURI('./assets/A_Thousand_Years-528635.mp3');
                     audioDom.load();
                     audioDom.play().catch(function () { });
                 }

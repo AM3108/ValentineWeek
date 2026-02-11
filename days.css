@@ -902,13 +902,113 @@ h3 {
     display: none !important;
 }
 
+/* Hug Day: same layout as Rose Day - background Snapchat-2113618655 + animation/reveal */
 .hug-right {
-    background: url(./assets/couple-1853499.jpg);
-    background-repeat: no-repeat;
-    background-size: cover;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    background: transparent;
     border-top-right-radius: 1rem;
     border-bottom-right-radius: 1rem;
+    overflow-x: hidden;
+    overflow-y: auto;
+    min-height: 0;
+}
+
+.hug-right::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    background: url(./assets/Snapchat-2113618655.jpg) center / cover no-repeat;
+    filter: blur(4px);
+    -webkit-filter: blur(4px);
+    opacity: 0.92;
+}
+
+.hug-right .back-container,
+.hug-right .quote-heading,
+.hug-right .hug-game-wrap,
+.hug-right .hug-reveal-wrap,
+.hug-right .quotes {
+    position: relative;
+    z-index: 1;
+}
+
+.hug-right .quote {
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    background: rgba(0, 0, 0, 0.35);
+}
+
+/* Hug Day: animation image + final photo */
+.hug-game-wrap {
+    position: relative;
+    z-index: 2;
+    margin: 0.75rem 0;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.hug-animation-wrap {
+    position: relative;
+    width: 100%;
+    max-width: 320px;
+    border-radius: 16px;
+    overflow: hidden;
+    background: #1a1a1a;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+}
+
+.hug-animation-wrap img {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+/* Pencil sketch layer (Gemini_Generated_Image.png): revealed by scratching, then fades to show full color photo */
+.hug-grayscale-layer {
+    position: absolute;
+    inset: 0;
+    background-size: cover;
     background-position: center;
+    background-repeat: no-repeat;
+    pointer-events: none;
+    transition: opacity 14s ease-in-out;
+}
+
+.hug-grayscale-layer.hug-to-color {
+    opacity: 0;
+}
+
+/* Scratch card: canvas grey overlay, image only visible where scratched */
+.hug-scratch-canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    cursor: crosshair;
+    touch-action: none;
+    -webkit-user-select: none;
+    user-select: none;
+}
+
+.hug-countdown {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #e91e8c !important;
+    text-align: center;
+    margin-top: 1rem;
+    min-height: 1.5em;
+}
+
+.quotes.hug-hidden-until-game {
+    display: none !important;
 }
 
 .kiss-right {

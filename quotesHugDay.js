@@ -15,13 +15,34 @@ fetch('config.json')
     fpNameEl.innerText = config.fpName;
     spNameEl.innerText = config.spName;
 
-    // Then generate the quotes for Hug Day
-    const quotesDiv = document.querySelector(".quotes");
+    // Then generate the quotes for Hug Day (hidden until game animation + countdown finish)
+    const quotesDiv = document.getElementById("hug-quotes-area") || document.querySelector(".quotes");
 
     const hugDayQuotes = [
-      `A hug is a way to say, "I care,"
-A hug is a way to show, "I’m there."
-Happy Hug Day, my love!`
+      `Dear Madam Ji,
+
+Today is Hug Day, and I know distance stands between us.
+So this isn’t about a hug you can feel,
+but about the comfort you can know is there.
+
+If hugs could travel through thoughts and prayers,
+this one would quietly reach you—
+not to cross boundaries,
+but to say “You are cared for.”
+
+When days feel heavy or moments feel silent,
+I hope you’ll remember that somewhere,
+there is someone wishing you peace, strength,
+and a gentle sense of warmth.
+
+A few lines from my heart:
+
+“Faansle chahe jitne bhi ho,
+ehsaas kam nahi honge.
+Aaj hug sirf khayaal mein sahi,
+par duaon mein hamesha honge.”
+
+Happy Hug Day, Madam Ji 🤍`
 
     ];
 //     ,

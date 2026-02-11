@@ -138,15 +138,23 @@
             event.preventDefault();
         }, false);
 
-        // Auto-start music when website opens (may be blocked by browser until user interaction)
+        // Auto-start music when website opens or refreshes (may be blocked by browser until user interaction)
         function tryStartMusic() {
-            audioDom.play().then(function () { musicCloseDom.classList.add('rotate'); }).catch(function () { });
+            if (audioDom && audioDom.paused) {
+                audioDom.play().then(function () { musicCloseDom.classList.add('rotate'); }).catch(function () { });
+            }
         }
         if (audioDom.readyState >= 3) {
             tryStartMusic();
         } else {
             audioDom.addEventListener('canplaythrough', function () { tryStartMusic(); }, { once: true });
         }
+        window.addEventListener('load', function () {
+            setTimeout(tryStartMusic, 300);
+        });
+        window.addEventListener('pageshow', function (e) {
+            if (audioDom && audioDom.paused) tryStartMusic();
+        });
         // If autoplay was blocked, start music on first user click anywhere (e.g. inside iframe)
         window.addEventListener('message', function (e) {
             if (e.data === 'startMusic' && audioDom.paused) {

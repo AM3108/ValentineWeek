@@ -202,6 +202,12 @@
                 tryPlay();
             }, { once: true });
             audioEl.addEventListener('canplaythrough', function () { tryPlay(); }, { once: true });
+            window.addEventListener('load', function () {
+                setTimeout(tryPlay, 400);
+            });
+            window.addEventListener('pageshow', function () {
+                if (audioEl.paused) tryPlay();
+            });
         })();
         document.addEventListener('DOMContentLoaded', function () {
             // Fetch config.json and update Instagram profile link + passwords

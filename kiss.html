@@ -48,7 +48,22 @@
                     </a>
                 </div>
                 <h3 class="quote-heading">Special Quotes for my special one on the Kiss Day! ❤️</h3>
-                <div class="quotes quotes-fullscreen"></div>
+                <div class="kiss-game-wrap" id="kiss-game-wrap">
+                    <p class="kiss-puzzle-title">Complete the puzzle!</p>
+                    <div class="kiss-scratch-wrap" id="kiss-scratch-wrap">
+                        <p class="kiss-scratch-hint">Scratch the grey area to reveal the puzzle.</p>
+                        <div class="kiss-animation-wrap" id="kiss-animation-wrap">
+                            <img src="./assets/Untitled (9).png" alt="Kiss Day" id="kiss-animation-img" />
+                            <canvas id="kiss-scratch-canvas" class="kiss-scratch-canvas"></canvas>
+                        </div>
+                    </div>
+                    <div class="kiss-puzzle-wrap kiss-puzzle-hidden" id="kiss-puzzle-wrap">
+                        <p class="kiss-puzzle-hint">Tap two pieces to swap. Complete the image!</p>
+                        <div class="kiss-puzzle-grid" id="kiss-puzzle-grid"></div>
+                    </div>
+                    <p class="kiss-countdown" id="kiss-countdown"></p>
+                </div>
+                <div class="quotes quotes-fullscreen kiss-hidden-until-game" id="kiss-quotes-area"></div>
             </div>
         </div>
         <div class="copyright-container">
@@ -65,6 +80,205 @@
         window.addEventListener('beforeunload', function () {
             if (window.parent !== window) window.parent.postMessage('restoreDefaultMusic', '*');
         });
+
+        (function () {
+            var gameWrap = document.getElementById('kiss-game-wrap');
+            var puzzleWrap = document.getElementById('kiss-puzzle-wrap');
+            var scratchWrap = document.getElementById('kiss-scratch-wrap');
+            var gridEl = document.getElementById('kiss-puzzle-grid');
+            var img = document.getElementById('kiss-animation-img');
+            var canvas = document.getElementById('kiss-scratch-canvas');
+            var countdownEl = document.getElementById('kiss-countdown');
+            var quotesArea = document.getElementById('kiss-quotes-area');
+            var PUZZLE_IMG = './assets/Untitled (9).png';
+            var ROWS = 3, COLS = 3, TOTAL = 9;
+            var COUNTDOWN_SEC = 3;
+            var REVEAL_THRESHOLD = 0.5;
+            var BRUSH_SIZE = 36;
+            var state = [];
+            var selectedIndex = null;
+            var scratchStarted = false;
+            var scratching = false;
+            var ctx = null;
+
+            function runCountdown() {
+                var n = COUNTDOWN_SEC;
+                countdownEl.textContent = n;
+                var t = setInterval(function () {
+                    n--;
+                    if (n > 0) countdownEl.textContent = n;
+                    else {
+                        clearInterval(t);
+                        countdownEl.textContent = '';
+                        gameWrap.style.display = 'none';
+                        quotesArea.classList.remove('kiss-hidden-until-game');
+                    }
+                }, 1000);
+            }
+
+            function getBgPosition(pieceIndex) {
+                var row = Math.floor(pieceIndex / COLS);
+                var col = pieceIndex % COLS;
+                return (col * 50) + '% ' + (row * 50) + '%';
+            }
+
+            function shuffle(arr) {
+                for (var i = arr.length - 1; i > 0; i--) {
+                    var j = Math.floor(Math.random() * (i + 1));
+                    var t = arr[i]; arr[i] = arr[j]; arr[j] = t;
+                }
+                return arr;
+            }
+
+            function isPuzzleSolved() {
+                for (var i = 0; i < TOTAL; i++) { if (state[i] !== i) return false; }
+                return true;
+            }
+
+            function renderPuzzle() {
+                if (!gridEl) return;
+                gridEl.innerHTML = '';
+                for (var i = 0; i < TOTAL; i++) {
+                    var piece = document.createElement('div');
+                    piece.className = 'kiss-puzzle-piece';
+                    piece.dataset.index = i;
+                    var pieceIndex = state[i];
+                    piece.style.backgroundImage = 'url("' + encodeURI(PUZZLE_IMG) + '")';
+                    piece.style.backgroundPosition = getBgPosition(pieceIndex);
+                    piece.addEventListener('click', handlePieceClick);
+                    gridEl.appendChild(piece);
+                }
+            }
+
+            function updatePuzzleSelection() {
+                var pieces = gridEl.querySelectorAll('.kiss-puzzle-piece');
+                for (var i = 0; i < pieces.length; i++) {
+                    pieces[i].classList.toggle('selected', parseInt(pieces[i].dataset.index, 10) === selectedIndex);
+                }
+            }
+
+            function handlePieceClick(e) {
+                var idx = parseInt(e.currentTarget.dataset.index, 10);
+                if (selectedIndex === null) {
+                    selectedIndex = idx;
+                    updatePuzzleSelection();
+                    return;
+                }
+                if (selectedIndex === idx) {
+                    selectedIndex = null;
+                    updatePuzzleSelection();
+                    return;
+                }
+                var t = state[selectedIndex];
+                state[selectedIndex] = state[idx];
+                state[idx] = t;
+                selectedIndex = null;
+                renderPuzzle();
+                updatePuzzleSelection();
+                if (isPuzzleSolved()) runCountdown();
+            }
+
+            function showPuzzle() {
+                if (scratchWrap) scratchWrap.style.display = 'none';
+                if (puzzleWrap) {
+                    puzzleWrap.classList.remove('kiss-puzzle-hidden');
+                    puzzleWrap.style.display = 'flex';
+                }
+                state = [];
+                for (var i = 0; i < TOTAL; i++) state.push(i);
+                do { shuffle(state); } while (isPuzzleSolved());
+                renderPuzzle();
+            }
+
+            function initCanvas() {
+                if (!canvas || !img) return;
+                var w = img.offsetWidth;
+                var h = img.offsetHeight;
+                if (w <= 0 || h <= 0) return;
+                canvas.width = w;
+                canvas.height = h;
+                ctx = canvas.getContext('2d');
+                if (!ctx) return;
+                ctx.fillStyle = '#8c8c8c';
+                ctx.fillRect(0, 0, w, h);
+                ctx.fillStyle = 'rgba(255, 255, 255, 0.95)';
+                ctx.font = 'bold 22px Montserrat, sans-serif';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillText('Scratch me', w / 2, h / 2);
+            }
+
+            function getPos(e) {
+                var rect = canvas.getBoundingClientRect();
+                var scaleX = canvas.width / rect.width;
+                var scaleY = canvas.height / rect.height;
+                var clientX = e.touches ? e.touches[0].clientX : e.clientX;
+                var clientY = e.touches ? e.touches[0].clientY : e.clientY;
+                return { x: (clientX - rect.left) * scaleX, y: (clientY - rect.top) * scaleY };
+            }
+
+            function scratch(x, y) {
+                if (!ctx) return;
+                ctx.globalCompositeOperation = 'destination-out';
+                ctx.beginPath();
+                ctx.arc(x, y, BRUSH_SIZE / 2, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.globalCompositeOperation = 'source-over';
+            }
+
+            function getScratchedRatio() {
+                if (!ctx || !canvas) return 0;
+                var pixels = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
+                var total = pixels.length / 4;
+                var clear = 0;
+                for (var i = 3; i < pixels.length; i += 4) { if (pixels[i] < 128) clear++; }
+                return clear / total;
+            }
+
+            function checkReveal() {
+                if (scratchStarted) return;
+                if (getScratchedRatio() >= REVEAL_THRESHOLD) {
+                    scratchStarted = true;
+                    canvas.style.opacity = '0';
+                    canvas.style.pointerEvents = 'none';
+                    canvas.style.transition = 'opacity 0.3s';
+                    setTimeout(showPuzzle, 500);
+                }
+            }
+
+            function onDown(e) {
+                e.preventDefault();
+                scratching = true;
+                var p = getPos(e);
+                scratch(p.x, p.y);
+                checkReveal();
+            }
+
+            function onMove(e) {
+                if (!scratching) return;
+                e.preventDefault();
+                var p = getPos(e);
+                scratch(p.x, p.y);
+                checkReveal();
+            }
+
+            function onUp() { scratching = false; }
+
+            if (img) {
+                img.addEventListener('load', initCanvas);
+                if (img.complete) initCanvas();
+            }
+
+            if (canvas) {
+                canvas.addEventListener('mousedown', onDown);
+                canvas.addEventListener('mousemove', onMove);
+                canvas.addEventListener('mouseup', onUp);
+                canvas.addEventListener('mouseleave', onUp);
+                canvas.addEventListener('touchstart', onDown, { passive: false });
+                canvas.addEventListener('touchmove', onMove, { passive: false });
+                canvas.addEventListener('touchend', onUp);
+            }
+        })();
     </script>
 </body>
 

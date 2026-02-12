@@ -1,11 +1,18 @@
-const quotesDiv = document.querySelector(".quotes");
+const quotesDiv = document.getElementById("kiss-quotes-area") || document.querySelector(".quotes");
 const fpName = document.querySelector("#fpname");
 const spName = document.querySelector("#spname");
 
 const kissDayQuotes = [
-  `A kiss is a language of love,
-That speaks directly to the heart.
-Happy Kiss Day, my love!`
+  `Dear Madam Ji,
+
+Today is Kiss Day, and I believe not every feeling needs to be expressed openly or loudly.
+Some emotions are meant to stay gentle—
+felt in silence,
+protected within personal space,
+and carried with quiet respect.
+
+With sincere warmth and regard,
+Happy Kiss Day, Madam Ji 🤍`
 ];
 // ,
 //   `Your kisses are my favorite melody,

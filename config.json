@@ -15,7 +15,7 @@
         "teddy.html": "Bhindi",
         "promise.html": "Sunday",
         "hug.html": "Salman",
-        "kiss.html": "1234",
+        "kiss.html": "Virat",
         "valentine.html": "1234"
     },
     "pageHints": {
@@ -25,7 +25,7 @@
         "teddy.html": "Your favorite food? (But I hate it before meeting you, it starts with B and ends with I)",
         "promise.html": "The day we met? (e.g. today is wednesday then wednesday)",
         "hug.html": "Your favorite Hero? (e.g. Akshay Kumar, then Akshay)",
-        "kiss.html": "Our special number",
+        "kiss.html": "YourFavouraite Cricketer? (e.g. Sachin Tendulakr, then Sachin)",
         "valentine.html": "Our special number"
     }
 }

@@ -11,6 +11,18 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
+    padding: 2rem;
+    box-sizing: border-box;
+}
+
+#parentElement {
+    padding: 1.5rem;
+}
+
+#showMessage {
+    padding: 2rem;
+    max-width: 90%;
+    box-sizing: border-box;
 }
 
 h1 {
@@ -59,7 +71,8 @@ h1 {
 }
 
 #showMessage h1 {
-    font-size: 50px;
+    font-size: 1.5rem;
+    font-weight: 600;
 }
 
 /* Animate Text */
@@ -74,6 +87,11 @@ h1 {
     padding-right: 0.05em;
     padding-bottom: 0.1em;
     overflow: hidden;
+}
+
+.ml6 .word {
+    display: inline-block;
+    white-space: nowrap;
 }
 
 .ml6 .letter {

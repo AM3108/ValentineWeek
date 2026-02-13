@@ -110,11 +110,39 @@ const propose = () => {
     // Play hata.mp3 concurrently
     const hataAudio = new Audio("assets/sounds/hata.mp3");
     hataAudio.play().catch(error => console.error("Hata audio playback failed:", error));
+
+    // After showing "Then it's settled—forever together 💖", start 10 sec countdown then redirect to quotes page
+    const countdownEl = document.getElementById('valentineSpecialCountdown');
+    if (countdownEl) {
+        countdownEl.style.display = 'block';
+        var n = 10;
+        countdownEl.textContent = n;
+        var t = setInterval(function () {
+            n--;
+            if (n > 0) {
+                countdownEl.textContent = n;
+            } else {
+                clearInterval(t);
+                countdownEl.textContent = '';
+                window.location.replace('../valentine.html?quotes=1');
+            }
+        }, 1000);
+    } else {
+        setTimeout(function () { window.location.replace('../valentine.html?quotes=1'); }, 10000);
+    }
 };
 
-// Animate Text with Anim JS
+// Animate Text with Anime JS - wrap by words so lines break between words, not mid-word
 var textWrapper = document.querySelector(".ml6 .letters");
-textWrapper.innerHTML = textWrapper.textContent.replace(/\S/g, "<span class='letter'>$&</span>");
+var text = textWrapper.textContent;
+var words = text.split(/\s+/);
+var html = words.map(function (word) {
+    var letters = word.split("").map(function (c) {
+        return "<span class='letter'>" + c + "</span>";
+    }).join("");
+    return "<span class='word'>" + letters + "</span>";
+}).join(" ");
+textWrapper.innerHTML = html;
 
 anime.timeline({ loop: true })
     .add({

@@ -1,86 +1,93 @@
-const quotesDiv = document.querySelector(".quotes");
+const quotesDiv = document.getElementById('valentine-quotes-area');
 const fpName = document.querySelector("#fpname");
 const spName = document.querySelector("#spname");
 
-const roseDay = [
-  `You are my forever Valentine,
-  The one who makes my heart shine.
-  Happy Valentine's Day, my love!`
+const valentineDayQuotes = [
+  `Dear Madam Ji,
+
+I hope the journey from Rose Day to Valentine’s Day felt like a beautiful ride for you.
+As this chapter comes to an end, I realize I have so many things to say—
+but today, I will save some of them for the future,
+because some feelings deserve time as well.
+
+For me, this journey has been truly special.
+It is something I loved doing—for someone who genuinely means a lot to me.
+And doing all this has made me very happy.
+
+But this is not an end—
+it is just the beginning.
+So please be ready, because there will always be little surprises waiting for you.
+
+Today’s secret message is about 10th August 2025.
+That day holds a very special place in my heart—
+the day our families met,
+and at the temple, our bond was accepted with the grace of Bhagwan Shri Krishna.
+It was also the first time I surprised you,
+when I said I wouldn’t come—but I did.
+
+So yes… be ready again. 😊
+
+A few lines from my heart:
+
+“Safar chhota tha, par ehsaas gehre ho gaye,
+Kuch pal chup rahe, par yaadein thehar si gayi.
+Yeh ant nahi hai, bas ek naya aaghaz hai,
+Kyunki kahaniyaan wahi sundar hoti hain—
+jahan aage bhi kuch khaas ho baaki.”
+
+Happy Valentine’s Day, Madam Ji 🌹🤍
+If love is a journey, then every step with you already feels worth it.
+And if this story has just begun,
+I’m grateful for every page we are yet to write—together.`
 ];
-// ,
-//   `You are the reason I believe in love,
-//   You are my blessing from above.
-//   Happy Valentine's Day, sweetheart!`,
-//   `You are my heart, my soul, my everything,
-//   With you, my life is forever spring.
-//   Happy Valentine's Day, darling!`,
-//   `तुम मेरे दिल की धड़कन हो,
-//   तुम मेरी ज़िंदगी का सहारा हो।
-//   हैप्पी वैलेंटाइन डे, मेरी जान!`,
-//   `You are my today, tomorrow, and forever,
-//   My love for you will never waver.
-//   Happy Valentine's Day, sweetheart!`,
-//   `You are my sunshine on cloudy days,
-//   My guiding light in every way.
-//   Happy Valentine's Day, my love!`,
-//   `You are my dream come true,
-//   My forever Valentine, only you.
-//   Happy Valentine's Day, darling!`,
-//   `तुम मेरे प्यार की पहचान हो,
-//   तुम मेरी ज़िंदगी का अरमान हो।
-//   हैप्पी वैलेंटाइन डे, मेरी जान!`,
-//   `You are the melody in my heart,
-//   The reason my world feels like art.
-//   Happy Valentine's Day, sweetheart!`,
-//   `You are my forever and always,
-//   My love for you will never fade.
-//   Happy Valentine's Day, my love!`,
-//   `You are my happiness, my pride,
-//   The one who’s always by my side.
-//   Happy Valentine's Day, darling!`,
-//   `You are my heart’s greatest treasure,
-//   A love beyond any measure.
-//   Happy Valentine's Day, sweetheart!`,
-//   `तुम मेरे दिल की खुशी हो,
-//   तुम मेरी ज़िंदगी की मंज़िल हो।
-//   हैप्पी वैलेंटाइन डे, मेरी जान!`,
-//   `You are my forever Valentine,
-//   The one who makes my heart align.
-//   Happy Valentine's Day, my love!`,
-//   `You are my everything, my all,
-//   The one who makes me stand tall.
-//   Happy Valentine's Day, darling!`
+
+function typewriterValentine(text, textEl, speedMs, onComplete) {
+  textEl.textContent = '';
+  let index = 0;
+  function tick() {
+    if (index < text.length) {
+      textEl.textContent += text[index];
+      index++;
+      setTimeout(tick, speedMs);
+    } else {
+      if (onComplete) onComplete();
+    }
+  }
+  tick();
+}
+
+if (quotesDiv && valentineDayQuotes.length > 0) {
+  const para = document.createElement('p');
+  para.classList.add('quote');
+  const textSpan = document.createElement('span');
+  textSpan.className = 'quote-typewriter-text';
+  para.appendChild(textSpan);
+  quotesDiv.appendChild(para);
+}
+
+window.startValentineQuoteTypewriter = function () {
+  const quoteEl = quotesDiv && quotesDiv.querySelector('.quote');
+  const textEl = quoteEl && quoteEl.querySelector('.quote-typewriter-text');
+  if (!textEl || !valentineDayQuotes[0]) return;
+  const cursor = document.createElement('span');
+  cursor.className = 'typewriter-cursor';
+  cursor.setAttribute('aria-hidden', 'true');
+  cursor.textContent = '|';
+  quoteEl.appendChild(cursor);
+  typewriterValentine(valentineDayQuotes[0], textEl, 65, function () {
+    if (cursor.parentNode) cursor.remove();
+  });
+};
+
 fetch('config.json')
   .then(response => response.json())
   .then(config => {
-    // Set names from configuration.
     fpName.innerText = config.fpName;
     spName.innerText = config.spName;
-
-    // Update Instagram profile link and name.
     const instagramProfileLink = document.getElementById('instagramProfileLink');
     const instagramProfileNameElement = document.getElementById('instagramProfileName');
     instagramProfileLink.href = `https://instagram.com/${config.instagramUsername}`;
     instagramProfileNameElement.textContent = config.instagramProfileName;
-    
-    const quotesNr = roseDay.length;
-    for (let i = 0; i < quotesNr; i++) {
-      const link = document.createElement('a');
-      link.setAttribute('href', 'card.html?source=valentine');
-      const para = document.createElement("p");
-      para.classList.add("quote");
-      para.innerText = roseDay[i];
-      link.appendChild(para);
-      quotesDiv.appendChild(link);
-    }
-
-    const quoteDivs = document.querySelectorAll(".quote");
-    quoteDivs.forEach(quote => {
-      quote.addEventListener('click', function (e) {
-        const chosenQuote = e.target.innerText;
-        localStorage.setItem("chosenQuote", chosenQuote);
-      });
-    });
 
     if (typeof initExpressFeelings === 'function') {
       initExpressFeelings(quotesDiv, { subject: "Valentine's Day - Express your feelings" });

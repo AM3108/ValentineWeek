@@ -16,7 +16,7 @@
         "promise.html": "Sunday",
         "hug.html": "Salman",
         "kiss.html": "Virat",
-        "valentine.html": "1234"
+        "valentine.html": "10082025"
     },
     "pageHints": {
         "rose.html": "When we met First? (e.g. 7th Feb 2026 then 07022026)",
@@ -26,6 +26,6 @@
         "promise.html": "The day we met? (e.g. today is wednesday then wednesday)",
         "hug.html": "Your favorite Hero? (e.g. Akshay Kumar, then Akshay)",
         "kiss.html": "YourFavouraite Cricketer? (e.g. Sachin Tendulakr, then Sachin)",
-        "valentine.html": "Our special number"
+        "valentine.html": "When we met with Our families? (e.g. 7th Feb 2026 then 07022026)"
     }
 }
